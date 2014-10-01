@@ -7,7 +7,6 @@ requirejs.config({
 
 require(['app'],
 	function() {
-		alert('main')
 		angular.bootstrap(document, ['app']);
 	}
 );

@@ -10,7 +10,6 @@ define([
 			.controller('dataController', dataCtrl)
 			.directive('circleView', circleView)
 			.directive('plainView', plainView);
-		});
 	}
 );
 

@@ -1,4 +1,4 @@
-define([]funcrion() {
+define([], function() {
 	'use strict';
 	var factory = function($log) {
 
@@ -52,7 +52,7 @@ define([]funcrion() {
 						else if(d.maturity === "Be informed")
 							++widthArray.arr[2];
 						else if(d.maturity === "Avoid")
-							++widthArray.arr[3];                			
+							++widthArray.arr[3];
 						++all;
 					});
 
@@ -327,5 +327,5 @@ define([]funcrion() {
 		};
 		return directiveObj;
 	}
-	return ['$log', factory];})();
+	return ['$log', factory];
 });
