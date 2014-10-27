@@ -17,37 +17,29 @@
 	var myDirective = (function(){
 		var factory = function(/*dependencies here*/){
 			var i = 1;
-			var o = {			
+			var o = {	
+				templateUrl: 'myController.tmpl.html',	
 				scope:{
 					at: '=attr'
 				},
 				compile: function compile(temaplateElement, templateAttrs) {
                 	return {
 	                    pre: function (scope, element, attrs) {
-							var r = 10;
-							var w = 200,
-								h = 200;	
+							var w = 600,
+								h = w;	
 
 							var root = d3.selectAll('div[my-directive]');
-							var svg = root
-								.append('svg')
+							var svg = root.select('svg')
 								.attr('width', w)
-								.attr('height', h)
-								.style("border", "1px solid black");
-
-							svg.append('rect')
-								.attr('x', 0)
-								.attr('y', 0)
-								.attr('width', '100%')
-								.attr('height', '100%')
-								.attr('fill', '#f1f1f5');		            				
+								.attr('height', h);
+	            				
 	                    },
 	                    post: function(scope, element, attrs) { 
 
 	                    }
 	                }
 	            },
-				//template: 'Hello world: {{at}}',
+
 				link: function (scope, element, attrs) {	
 
 				}
