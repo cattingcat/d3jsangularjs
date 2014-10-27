@@ -6,10 +6,15 @@
 <body ng-app="app">
 	
 	<div ng-controller="ctrl">
-		<button ng-click="click()"> Click </button>
+	
 		<div>
 			<input type="text" placeholder="filter" />
+			<div ng-repeat="item in data.items">
+				{{item}}
+			</div>
+			<button ng-click="click()"> Click me</button>
 		</div>
+	
 
 		<div>
 			<input type="radio" ng-model="view" value="circle" checked> Circle </input>
@@ -24,7 +29,7 @@
 			</div>
 
 			<div ng-switch-when="plain">
-				TODO: plain
+				<div plain-view="data"></div>
 			</div>
 
 			<div ng-switch-when="circle" class="radar-container">	

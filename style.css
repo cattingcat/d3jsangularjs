@@ -7,12 +7,6 @@ svg {
 
 }
 
-text {
-	font-family: impact, georgia, times, serif;
-	font-weight: normal; 
-	font-style: normal;
-}
-
 div.radar-container {
 	width: 90%;
 	display: inline-block;
