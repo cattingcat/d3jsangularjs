@@ -16,6 +16,7 @@ text {
 div.radar-container {
 	width: 90%;
 	display: inline-block;
+	overflow: auto;
 }
 
 div.radar-container-item {

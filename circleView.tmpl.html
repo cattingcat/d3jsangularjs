@@ -1,13 +1,15 @@
-<div class="radar-container">
+
+<div class="radar-container">	
+
 	<div class="tree radar-container-item">
-		<legend> {{dataSource.name}} </legend>
+		<legend> DataSource: {{dataSource.name}} </legend>
 		<div ng-repeat="item in dataSource.data">
 			{{item}}
 		</div>
 	</div>
 
 	<div class="radar-svg radar-container-item">
-		<svg id="radar">
+		<svg width="500" height="500">
 			<circle cx="0" cy="100%" r="98%" fill="#FFE6ED"/>
 			<circle cx="0" cy="100%" r="87%" fill="#FDEEEC"/>
 			<circle cx="0" cy="100%" r="75%" fill="#FDF7ED"/>
@@ -25,3 +27,7 @@
 		<!-- <text x="90%" y="90%" fill="red"> Hello world!</text> -->
 	</div>
 </div>
+
+
+
+

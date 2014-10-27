@@ -6,10 +6,32 @@
 <body ng-app="app">
 	
 	<div ng-controller="ctrl">
-		<button ng-click="clicked();">Test</button>
-		Name: {{o.name}}
+		<button ng-click="click()"> Click </button>
+		<div>
+			<input type="text" placeholder="filter" />
+		</div>
 
-		<div my-directive attr='o'>	</div>
+		<div>
+			<input type="radio" ng-model="view" value="circle" checked> Circle </input>
+			<input type="radio" ng-model="view" value="table"> Table </input>
+			<input type="radio" ng-model="view" value="plain"> Plain </input>
+		</div>
+
+		<div ng-switch="view">
+
+			<div ng-switch-when="table">
+				TODO: table
+			</div>
+
+			<div ng-switch-when="plain">
+				TODO: plain
+			</div>
+
+			<div ng-switch-when="circle" class="radar-container">	
+				<div circle-view="data"></div>
+			</div>
+
+		</div>
 	</div>
 
 	<script src="http://d3js.org/d3.v3.js"></script>

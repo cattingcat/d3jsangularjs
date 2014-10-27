@@ -3,57 +3,50 @@
 
 	var ctrl = (function(){
 		var factory = function($scope){
-			$scope.o = {
-				name: 'some obj',				
+			$scope.data = {
+				name: 'someObj',				
 				data: [1, 2, 3, 4]
 			};
-			$scope.clicked = function(){
-				$scope.o.name = 'hi';
+			$scope.view = 'circle';
+			$scope.click = function(){
+				$scope.data.name = 'hi';
 			}
 		}
 		return ['$scope', factory];
 	})();
 
-	var myDirective = (function(){
-		var factory = function(/*dependencies here*/){
+	var circleView = (function(){
+		var factory = function($log){
 			var i = 1;
 			var o = {	
-				templateUrl: 'myController.tmpl.html',	
+				templateUrl: 'circleView.tmpl.html',	
 				scope:{
-					dataSource: '=attr'
+					dataSource: '=circleView'
 				},
-				compile: function compile(temaplateElement, templateAttrs) {
+				compile: function (temaplateElement, templateAttrs) {
                 	return {
 	                    pre: function (scope, element, attrs) {
-							var w = 600,
-								h = w;	
-
-							var root = d3.selectAll('div[my-directive]');
-							var svg = root.select('svg#radar')
-								.attr('width', w)
-								.attr('height', h);
-	            				
+	                    	$log.info('pre');
+	                    	if(!scope.dataSource)
+	                    		$log.error('datasource is undefined');
+	                    	else
+	                    		$log.info(scope.dataSource);
 	                    },
 	                    post: function(scope, element, attrs) { 
-
-	                    }
+	                    	$log.info('post');
+	                    }        				
 	                }
-	            },
-
-				link: function (scope, element, attrs) {	
-
-				}
-
+	            }
 			};
 			return o;
 		}
-		return [/*dependencies here*/ factory];
+		return ['$log', factory];
 	})();
 
 
 	app
 		.controller('ctrl', ctrl)
-		.directive('myDirective', myDirective);
+		.directive('circleView', circleView);
 
 
 })(angular);
