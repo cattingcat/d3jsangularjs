@@ -1,4 +1,35 @@
 svg {
 	border-left: 1px solid gray;
 	border-bottom: 1px solid gray;
+	display: inline-block;
+	/*tmp*/
+	border: 1px solid gray;
+
+}
+
+text {
+	font-family: impact, georgia, times, serif;
+	font-weight: normal; 
+	font-style: normal;
+}
+
+div.radar-container {
+	width: 90%;
+	display: inline-block;
+}
+
+div.radar-container-item {
+	display: inline-block;
+	vertical-align: top;
+		/*tmp*/
+	border: 1px solid gray;
+}
+
+div.radar-svg {
+	width: 50%;
+}
+
+div.tree {
+	width: 20%;
+	height: 100%;
 }

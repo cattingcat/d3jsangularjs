@@ -20,7 +20,7 @@
 			var o = {	
 				templateUrl: 'myController.tmpl.html',	
 				scope:{
-					at: '=attr'
+					dataSource: '=attr'
 				},
 				compile: function compile(temaplateElement, templateAttrs) {
                 	return {
@@ -29,7 +29,7 @@
 								h = w;	
 
 							var root = d3.selectAll('div[my-directive]');
-							var svg = root.select('svg')
+							var svg = root.select('svg#radar')
 								.attr('width', w)
 								.attr('height', h);
 	            				
