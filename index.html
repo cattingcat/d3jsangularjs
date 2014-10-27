@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head>
+
+</head>
+<body ng-app="app">
+	
+	<div ng-controller="ctrl">
+		<button ng-click="clicked();">Test</button>
+		Name: {{o.name}}
+
+		<div my-directive attr='o'>			
+		</div>
+	</div>
+
+
+
+	<script src="http://d3js.org/d3.v3.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.js"></script>
+	<script src="./script.js"></script>
+	<script src="./appscript.js"></script>
+</body>
+</html>
