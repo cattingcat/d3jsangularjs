@@ -56,12 +56,12 @@
 						"movement" : "Stable",
 						"maturity" : "Avoid",
 						"source" : {
-							"practical" : 5,
-							"theoretical" : 0
+							"practical" : 7,
+							"theoretical" : 1
 						},
 						id : 1
 					});
-				$scope.$apply();
+				$scope.$broadcast('dataSourceUpdated', {});
 			}
 		}
 		return ['$scope', factory];
@@ -176,12 +176,13 @@
 		                    		}
 		                    	}
 
+		                    	svg.selectAll('g')
+		                    		.remove();
+
 		                    	var g = svg.append('g')
 		                    		.selectAll('rect')
 		                    		.data(scope.dataSource.items) 	                    		                 	 	
-	                    	 		.enter();
-
-		                    	g
+	                    	 		.enter()		                    	
 		                    		.append('text')	                    		
 		                    		.text(helpers.text)
 		                    		.attr('text-anchor', 'left')
@@ -198,6 +199,10 @@
 
 	                    	scope.$watch('dataSource', function(){
 	                    		render();
+	                    	});
+
+	                    	scope.$on('dataSourceUpdated', function(){
+								render();
 	                    	});
 	                    }        				
 	                }
