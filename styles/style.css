@@ -1,27 +1,33 @@
-svg {
+svg#circleViewHost {
 	border-left: 1px solid gray;
 	border-bottom: 1px solid gray;
 	display: inline-block;
-	/*tmp*/
-	border: 1px solid gray;
+}
 
+svg.plainView {
+	border: 1px solid gray;
+	display: inline-block;
 }
 
 text.vertical {
 	writing-mode: tb;
 }
 
+text.custom-text {
+	fill: #555555;
+}
+
 text.use {
-	fill : #BEE5AD;
+	fill : #8FAF3A;
 }
 text.use-with-care {
-	fill : #EDE7AD;
+	fill : #DC9939;
 }
 text.be-informed {
-	fill : #FDBEAC;
+	fill : #EB5645;
 }
 text.avoid {
-	fill : #FFA6BD;
+	fill : #FF3C73;
 }
 
 div.radar-container {
@@ -34,7 +40,7 @@ div.radar-container-item {
 	display: inline-block;
 	vertical-align: top;
 		/*tmp*/
-	border: 1px solid gray;
+	/*border: 1px solid gray;*/
 }
 
 div.radar-svg {

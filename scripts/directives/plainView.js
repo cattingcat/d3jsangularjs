@@ -75,7 +75,8 @@ var plainView = (function(){
                     	 			return tmp;
                     	 		})
                     	 		.attr('x', helpers.x)
-	                    		.attr('y', helpers.y);
+	                    		.attr('y', helpers.y)
+	                    		.attr('class', 'custom-text');
                     	};
 
                     	scope.$watch('dataSource', function(){

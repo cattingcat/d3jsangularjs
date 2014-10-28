@@ -29,7 +29,7 @@ var dataCtrl = (function(){
 					"movement" : "Up",
 					"maturity" : "Use with care",
 					"source" : {
-						"practical" : 4,
+						"practical" : 5,
 						"theoretical" : 3
 					},
 					id : 7
@@ -50,7 +50,7 @@ var dataCtrl = (function(){
 		$scope.click = function(){
 			$scope.data.items.push({
 					"name" : "Java",
-					"movement" : "Stable",
+					"movement" : "Down",
 					"maturity" : "Avoid",
 					"source" : {
 						"practical" : 7,
