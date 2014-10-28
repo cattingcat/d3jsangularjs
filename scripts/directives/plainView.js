@@ -107,6 +107,36 @@ var plainView = (function(){
 			});
 			return res;
 		};
+		var d3Helpers = {
+			x: function(data){
+				if(data.maturity === "Use") {
+					return (widthArray.useStart() + 3) + '%';
+				} else if(data.maturity === "Use with care") {
+					return widthArray.useCareStart() + '%';
+				} else if(data.maturity === "Be informed") {
+					return widthArray.beInformStart() + '%';
+				} else if(data.maturity === "Avoid") {
+					return widthArray.avoidStart() + '%';
+				}
+			},
+			y: function(data){ 
+				var tmp =  (100.0 * data.source.theoretical) / 
+				((data.source.theoretical + data.source.practical) || 1)
+				if(tmp < 5)
+					return '5%';
+				if(tmp > 100.0 - 5)
+					return (100.0 - 5) + '%';
+				return tmp + '%'; 
+			},
+			text: function(data){                    			
+				if(data.movement === 'Stable')
+					return  '\u25CF ' + data.name;
+				else if(data.movement === 'Up')
+					return  '\u25B2 ' + data.name;
+				else  //Down
+					return  '\u25BC ' + data.name;
+			}
+		};
 
 		var directiveObj = {	
 			templateUrl: '/scripts/directives/plainView.tmpl.html',	
@@ -131,41 +161,6 @@ var plainView = (function(){
                     		$log.info('rendering...');
 
 	                    	var svg = d3.select('svg#plainViewHost');	
-
-	                    	var w = svg.attr('width');
-	                    	var h = svg.attr('height');
-
-	                    	var d3Helpers = {
-	                    		x: function(data){
-									if(data.maturity === "Use") {
-		                				return (widthArray.useStart() + 3) + '%';
-									} else if(data.maturity === "Use with care") {
-		                				return widthArray.useCareStart() + '%';
-		                			} else if(data.maturity === "Be informed") {
-		                				return widthArray.beInformStart() + '%';
-		                			} else if(data.maturity === "Avoid") {
-		                				return widthArray.avoidStart() + '%';
-		                			}
-	                    		},
-	                    		y: function(data){ 
-	                    			var tmp =  (h * data.source.theoretical) / 
-	                    			((data.source.theoretical + data.source.practical) || 1)
-	                    			if(tmp < 5)
-	                    				return 5;
-	                    			if(tmp > h - 5)
-	                    				return h - 5;
-	                    			return tmp; 
-	                    		},
-	                    		text: function(data){                    			
-	                    			if(data.movement === 'Stable')
-	                    				return  '\u25CF ' + data.name;
-	                    			else if(data.movement === 'Up')
-	                    				return  '\u25B2 ' + data.name;
-	                    			else  //Down
-	                    				return  '\u25BC ' + data.name;
-	                    		}
-	                    	}
-
 
 							var itemsHost = svg.select('g.items-host');
 
