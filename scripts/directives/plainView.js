@@ -49,11 +49,11 @@ var plainView = (function(){
 	                    		},
 	                    		text: function(d){                    			
 	                    			if(d.movement === 'Stable')
-	                    				return  d.name + ' \u25CF';
+	                    				return  '\u25CF ' + d.name;
 	                    			else if(d.movement === 'Up')
-	                    				return  d.name + ' \u25B2';
+	                    				return  '\u25B2 ' + d.name;
 	                    			else  //Down
-	                    				return  d.name + ' \u25BC';
+	                    				return  '\u25BC ' + d.name;
 	                    		}
 	                    	}
 

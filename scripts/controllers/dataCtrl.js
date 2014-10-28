@@ -5,7 +5,7 @@ var dataCtrl = (function(){
 			"quadrant" : "Cache",
 			"items" : [
 				{
-					"name" : "Velocity(AppFabric Cache)",
+					"name" : "Velocity",
 					"movement" : "Stable",
 					"maturity" : "Use",
 					"source" : {

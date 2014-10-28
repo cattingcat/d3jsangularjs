@@ -30,6 +30,9 @@ text.avoid {
 	fill : #FF3C73;
 }
 
+line{
+    shape-rendering : crispEdges;
+}
 div.radar-container {
 	width: 90%;
 	display: inline-block;
