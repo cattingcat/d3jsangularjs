@@ -52,17 +52,27 @@ var dataCtrl = (function(){
 		};
 		
 		$scope.click = function(){
-			$scope.data.items.push({
-					"name" : "Java",
-					"movement" : "Down",
-					"maturity" : "Avoid",
-					"source" : {
-						"practical" : 7,
-						"theoretical" : 1
-					},
-					id : 1
-				});
-			$scope.$broadcast('dataSourceUpdated', {});
+			for (var i = 1000 - 1; i >= 0; i--) {
+				
+			
+				var mrnd = Math.floor(Math.random() * 4);
+				var maturities = ['Use', 'Use with care', 'Be informed', 'Avoid'];
+
+				var trnd = Math.floor(Math.random() * 3);
+				var trends = ['Up', 'Stable', 'Down']
+				
+				$scope.data.items.push({
+						"name" : "Java",
+						"movement" : trends[trnd],
+						"maturity" : maturities[mrnd],
+						"source" : {
+							"practical" : (Math.random() * 10),
+							"theoretical" : (Math.random() * 10)
+						},
+						id : 1
+					});
+				$scope.$broadcast('dataSourceUpdated', {});
+			};
 		};
 
 		$scope.filterChange = function(fltr){
