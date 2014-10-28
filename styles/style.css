@@ -7,6 +7,23 @@ svg {
 
 }
 
+text.vertical {
+	writing-mode: tb;
+}
+
+text.use {
+	fill : #BEE5AD;
+}
+text.use-with-care {
+	fill : #EDE7AD;
+}
+text.be-informed {
+	fill : #FDBEAC;
+}
+text.avoid {
+	fill : #FFA6BD;
+}
+
 div.radar-container {
 	width: 90%;
 	display: inline-block;
@@ -28,3 +45,8 @@ div.tree {
 	width: 20%;
 	height: 100%;
 }
+
+			
+			
+			
+			
