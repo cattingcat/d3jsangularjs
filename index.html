@@ -8,6 +8,12 @@
 	<div ng-controller="dataController">
 	
 		<div>
+			<select ng-Model="filter.trend" ng-change="filterChange()">
+				<option> All </option>
+				<option> Stable </option>
+				<option> Up </option>
+				<option> Down </option>
+            </select>
 			<!--<input type="text" placeholder="filter" />
 			<div ng-repeat="item in data.items">
 				{{item}}

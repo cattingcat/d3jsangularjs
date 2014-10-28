@@ -1,6 +1,6 @@
 'use strict';
 var dataCtrl = (function(){
-	var factory = function($scope){
+	var factory = function($scope, $log){
 		$scope.data = {
 			"quadrant" : "Cache",
 			"items" : [
@@ -17,7 +17,7 @@ var dataCtrl = (function(){
 				{
 					"name" : "Redis",
 					"movement" : "Down",
-					"maturity" : "Avoid",
+					"maturity" : "Use",
 					"source" : {
 						"practical" : 0,
 						"theoretical" : 4
@@ -46,6 +46,9 @@ var dataCtrl = (function(){
 				}
 			]
 		};
+		$scope.filter = {
+			trend: 'All'
+		};
 		
 		$scope.click = function(){
 			$scope.data.items.push({
@@ -59,8 +62,12 @@ var dataCtrl = (function(){
 					id : 1
 				});
 			$scope.$broadcast('dataSourceUpdated', {});
-		}
+		};
+
+		$scope.filterChange = function(fltr){
+			$scope.$broadcast('dataSourceFilter', $scope.filter);
+		};
 	}
-	return ['$scope', factory];
+	return ['$scope', '$log', factory];
 })();
 
