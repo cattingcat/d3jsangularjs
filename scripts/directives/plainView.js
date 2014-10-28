@@ -2,11 +2,11 @@
 var plainView = (function(){
 	var factory = function($log){
 		var wa = [];
-		var configGrid = function(dataSource){
+		var configGrid = function(collection){
 			wa = [0, 0, 0, 0];
 			wa.all = 0;
 
-			dataSource.items.map(function(d){
+			collection.map(function(d){
 				if(d.maturity === "Use")
 					++wa[0];
 				else if(d.maturity === "Use with care")
@@ -21,14 +21,15 @@ var plainView = (function(){
 			for (var i = wa.length - 1; i >= 0; i--) {
 				wa[i] = wa[i] * 100.0 / wa.all;
 			};
-			var minPerc = 13.0;
+			var minPerc = 15.0;
 
 			for (i = wa.length - 1; i >= 0; i--) {
 				if(wa[i] < minPerc){
-					wa[i] += minPerc;
+					var rest = wa[i]
+					wa[i] = minPerc;
 					for (var j = wa.length - 1; j >= 0; j--) {
-						if(j != i){
-							wa[j] -= minPerc / 3.0;
+						if(j != i && wa[j] > minPerc){
+							wa[j] -= (minPerc - rest) / 3.0;
 						}
 					}
 				}						
@@ -65,6 +66,18 @@ var plainView = (function(){
 			d3.select('text.avoid')
 				.attr('x', (wa[0] + wa[1] + wa[2] + wa[3] / 2) + '%');
 		};
+		var filter = function(collection, template){
+			var res = [];
+			if(!template)
+				return collection;
+			collection.map(function(item){
+				if((item.movement === template.trend || template.trend === 'All') && 
+					(item.maturity === template.recommendation || template.recommendation === 'All')){
+					res.push(item);
+				}				
+			});
+			return res;
+		};
 
 		var o = {	
 			templateUrl: '/scripts/directives/plainView.tmpl.html',	
@@ -79,7 +92,7 @@ var plainView = (function(){
                     	if(!scope.dataSource)
                     		$log.error('datasource is undefined');
 
-                		configGrid(scope.dataSource);
+                		configGrid(scope.dataSource.items);
                     },
 
                     post: function(scope, element, attrs) { 
@@ -95,22 +108,23 @@ var plainView = (function(){
 
 	                    	var helpers = {
 	                    		x: function(d){
-									if(d.maturity === "Use")
+									if(d.maturity === "Use") {
 		                				return (3) + '%';
-		                			else if(d.maturity === "Use with care")
+									} else if(d.maturity === "Use with care") {
 		                				return (wa[0]) + '%';
-		                			else if(d.maturity === "Be informed")
+		                			} else if(d.maturity === "Be informed") {
 		                				return (wa[0] + wa[1]) + '%';
-		                			else if(d.maturity === "Avoid")
+		                			} else if(d.maturity === "Avoid") {
 		                				return (wa[0] + wa[1] + wa[2]) + '%';
+		                			}
 	                    		},
 	                    		y: function(d){ 
 	                    			var tmp =  (h * d.source.theoretical) / 
 	                    			((d.source.theoretical + d.source.practical) || 1)
-	                    			if(tmp < 10)
-	                    				return 10;
-	                    			if(tmp > h - 20)
-	                    				return h - 20;
+	                    			if(tmp < 5)
+	                    				return 5;
+	                    			if(tmp > h - 5)
+	                    				return h - 5;
 	                    			return tmp; 
 	                    		},
 	                    		text: function(d){                    			
@@ -131,7 +145,7 @@ var plainView = (function(){
 
 	                    	var g = itemsHost.append('g')
 	                    		.selectAll('rect')
-	                    		.data(scope.dataSource.items) 	                    		                 	 	
+	                    		.data(filter(scope.dataSource.items, scope.templ)) 	                    		                 	 	
                     	 		.enter()		                    	
 	                    		.append('text')	                    		
 	                    		.text(helpers.text)
@@ -153,11 +167,13 @@ var plainView = (function(){
                     	});
 
                     	scope.$on('dataSourceUpdated', function(){
-                    		configGrid(scope.dataSource);
+                    		configGrid(scope.dataSource.items);
 							render();
                     	});
-                    	scope.$on('dataSourceFilter', function(e, filter){
-							$log.debug(filter.trend);
+                    	scope.$on('dataSourceFilter', function(e, template){
+							$log.debug(template.trend);
+							scope.templ = template;
+							render();
                     	});
                     }        				
                 }

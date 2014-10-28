@@ -47,7 +47,8 @@ var dataCtrl = (function(){
 			]
 		};
 		$scope.filter = {
-			trend: 'All'
+			trend: 'All',
+			recommendation: 'All'
 		};
 		
 		$scope.click = function(){
