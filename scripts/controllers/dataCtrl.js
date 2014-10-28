@@ -52,7 +52,7 @@ var dataCtrl = (function(){
 		};
 		
 		$scope.click = function(){
-			for (var i = 1000 - 1; i >= 0; i--) {
+			for (var i = 10 - 1; i >= 0; i--) {
 				
 			
 				var mrnd = Math.floor(Math.random() * 4);

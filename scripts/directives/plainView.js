@@ -1,70 +1,99 @@
 'use strict';
 var plainView = (function(){
 	var factory = function($log){
-		var wa = [];
+
+		// Helpers
+		var widthArray = [];
 		var configGrid = function(collection){
-			wa = [0, 0, 0, 0];
-			wa.all = 0;
+			widthArray = [0, 0, 0, 0];
+			widthArray.all = 0;
+			widthArray.useStart = function(){
+				return 0;
+			}
+			widthArray.useWidth = function(){
+				return this[0];
+			}
+			widthArray.useCareStart = function(){
+				return this.useStart() + this.useWidth();
+			}
+			widthArray.useCareWidth = function(){
+				return this[1];
+			}
+
+			widthArray.beInformStart = function(){
+				return this.useCareStart() + this.useCareWidth();
+			}
+			widthArray.beInformWidth = function(){
+				return this[2];
+			}
+
+			widthArray.avoidStart = function(){
+				return this.beInformStart() + this.beInformWidth();
+			}
+			widthArray.avoidWidth = function(){
+				return this[3];
+			}
+
+
+			var minWidth = 15.0;
 
 			collection.map(function(d){
 				if(d.maturity === "Use")
-					++wa[0];
+					++widthArray[0];
 				else if(d.maturity === "Use with care")
-					++wa[1];
+					++widthArray[1];
 				else if(d.maturity === "Be informed")
-					++wa[2];
+					++widthArray[2];
 				else if(d.maturity === "Avoid")
-					++wa[3];                			
-				++wa.all;
+					++widthArray[3];                			
+				++widthArray.all;
 			});
-
-			for (var i = wa.length - 1; i >= 0; i--) {
-				wa[i] = wa[i] * 100.0 / wa.all;
-			};
-			var minPerc = 15.0;
-
-			for (i = wa.length - 1; i >= 0; i--) {
-				if(wa[i] < minPerc){
-					var rest = wa[i]
-					wa[i] = minPerc;
-					for (var j = wa.length - 1; j >= 0; j--) {
-						if(j != i && wa[j] > minPerc){
-							wa[j] -= (minPerc - rest) / 3.0;
+			for (var i = widthArray.length - 1; i >= 0; i--) {
+				widthArray[i] = widthArray[i] * 100.0 / widthArray.all;
+			};		
+			for (i = widthArray.length - 1; i >= 0; i--) {
+				if(widthArray[i] < minWidth){
+					var rest = widthArray[i]
+					widthArray[i] = minWidth;
+					for (var j = widthArray.length - 1; j >= 0; j--) {
+						if(j != i && widthArray[j] > minWidth){
+							widthArray[j] -= (minWidth - rest) / 3.0;
 						}
 					}
 				}						
-			}						
+			}		
+
 
 			d3.select('rect.col-use')
-				.attr('width', wa[0] + '%');
+				.attr('width', widthArray.useWidth() + '%');
 			d3.select('rect.col-use-care')
-				.attr('x', wa[0] + '%')
-				.attr('width', wa[1] + '%');
+				.attr('x', widthArray.useCareStart() + '%')
+				.attr('width', widthArray.useCareWidth() + '%');
 			d3.select('rect.col-be-informed')
-				.attr('x', (wa[0] + wa[1]) + '%')
-				.attr('width', wa[2] + '%');
+				.attr('x', widthArray.beInformStart() + '%')
+				.attr('width', widthArray.beInformWidth() + '%');
 			d3.select('rect.col-avoid')
-				.attr('x', (wa[0] + wa[1] + wa[2]) + '%')
-				.attr('width', wa[3] + '%');
+				.attr('x', widthArray.avoidStart() + '%')
+				.attr('width', widthArray.avoidWidth() + '%');
 
 			d3.select('line.col-use-line')
-				.attr('x1', wa[0] + '%')
-				.attr('x2', wa[0] + '%');
+				.attr('x1', widthArray.useWidth() + '%')
+				.attr('x2', widthArray.useWidth() + '%');
 			d3.select('line.col-use-care-line')
-				.attr('x1', (wa[0] + wa[1]) + '%')
-				.attr('x2', (wa[0] + wa[1]) + '%');
+				.attr('x1', widthArray.beInformStart() + '%')
+				.attr('x2', widthArray.beInformStart() + '%');
 			d3.select('line.col-be-informed-line')
-				.attr('x1', (wa[0] + wa[1] + wa[2]) + '%')
-				.attr('x2', (wa[0] + wa[1] + wa[2]) + '%');
+				.attr('x1', widthArray.avoidStart() + '%')
+				.attr('x2', widthArray.avoidStart() + '%');
 
 			d3.select('text.use')
-				.attr('x', (wa[0] / 2) + '%');
+				.attr('x', (widthArray.useWidth() / 2) + '%');
 			d3.select('text.use-with-care')
-				.attr('x', (wa[0] + wa[1] / 2) + '%');
+				.attr('x', (widthArray.useCareStart() + widthArray.useCareWidth() / 2) + '%');
 			d3.select('text.be-informed')
-				.attr('x', (wa[0] + wa[1] + wa[2] / 2) + '%');
+				.attr('x', (widthArray.beInformStart() + widthArray.beInformWidth() / 2) + '%');
 			d3.select('text.avoid')
-				.attr('x', (wa[0] + wa[1] + wa[2] + wa[3] / 2) + '%');
+				.attr('x', (widthArray.avoidStart() + widthArray.avoidWidth() / 2) + '%');
 		};
 		var filter = function(collection, template){
 			var res = [];
@@ -79,7 +108,7 @@ var plainView = (function(){
 			return res;
 		};
 
-		var o = {	
+		var directiveObj = {	
 			templateUrl: '/scripts/directives/plainView.tmpl.html',	
 			scope:{
 				dataSource: '=plainView'
@@ -106,39 +135,39 @@ var plainView = (function(){
 	                    	var w = svg.attr('width');
 	                    	var h = svg.attr('height');
 
-	                    	var helpers = {
-	                    		x: function(d){
-									if(d.maturity === "Use") {
-		                				return (3) + '%';
-									} else if(d.maturity === "Use with care") {
-		                				return (wa[0]) + '%';
-		                			} else if(d.maturity === "Be informed") {
-		                				return (wa[0] + wa[1]) + '%';
-		                			} else if(d.maturity === "Avoid") {
-		                				return (wa[0] + wa[1] + wa[2]) + '%';
+	                    	var d3Helpers = {
+	                    		x: function(data){
+									if(data.maturity === "Use") {
+		                				return (widthArray.useStart() + 3) + '%';
+									} else if(data.maturity === "Use with care") {
+		                				return widthArray.useCareStart() + '%';
+		                			} else if(data.maturity === "Be informed") {
+		                				return widthArray.beInformStart() + '%';
+		                			} else if(data.maturity === "Avoid") {
+		                				return widthArray.avoidStart() + '%';
 		                			}
 	                    		},
-	                    		y: function(d){ 
-	                    			var tmp =  (h * d.source.theoretical) / 
-	                    			((d.source.theoretical + d.source.practical) || 1)
+	                    		y: function(data){ 
+	                    			var tmp =  (h * data.source.theoretical) / 
+	                    			((data.source.theoretical + data.source.practical) || 1)
 	                    			if(tmp < 5)
 	                    				return 5;
 	                    			if(tmp > h - 5)
 	                    				return h - 5;
 	                    			return tmp; 
 	                    		},
-	                    		text: function(d){                    			
-	                    			if(d.movement === 'Stable')
-	                    				return  '\u25CF ' + d.name;
-	                    			else if(d.movement === 'Up')
-	                    				return  '\u25B2 ' + d.name;
+	                    		text: function(data){                    			
+	                    			if(data.movement === 'Stable')
+	                    				return  '\u25CF ' + data.name;
+	                    			else if(data.movement === 'Up')
+	                    				return  '\u25B2 ' + data.name;
 	                    			else  //Down
-	                    				return  '\u25BC ' + d.name;
+	                    				return  '\u25BC ' + data.name;
 	                    		}
 	                    	}
 
 
-							var itemsHost = svg.select('g.items-host')
+							var itemsHost = svg.select('g.items-host');
 
 	                    	itemsHost.selectAll('g')
 	                    		.remove();
@@ -148,17 +177,17 @@ var plainView = (function(){
 	                    		.data(filter(scope.dataSource.items, scope.templ)) 	                    		                 	 	
                     	 		.enter()		                    	
 	                    		.append('text')	                    		
-	                    		.text(helpers.text)
+	                    		.text(d3Helpers.text)
 	                    		.attr('text-anchor', 'left')
 	                    		.attr('alignment-baseline', 'middle')
-                    	 		.attr('font-size', function(d){
-                    	 			var tmp = (d.source.theoretical + d.source.practical) * 2;
+                    	 		.attr('font-size', function(data){
+                    	 			var tmp = (data.source.theoretical + data.source.practical) * 2;
                     	 			if(tmp < 12)
                     	 				return 12;
                     	 			return tmp;
                     	 		})
-                    	 		.attr('x', helpers.x)
-	                    		.attr('y', helpers.y)
+                    	 		.attr('x', d3Helpers.x)
+	                    		.attr('y', d3Helpers.y)
 	                    		.attr('class', 'custom-text');
                     	};
 
@@ -179,7 +208,7 @@ var plainView = (function(){
                 }
             }
 		};
-		return o;
+		return directiveObj;
 	}
 	return ['$log', factory];
 })();
