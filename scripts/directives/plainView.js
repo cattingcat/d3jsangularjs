@@ -113,36 +113,6 @@ var plainView = (function(){
 					});
 					return res;
 				};
-				var d3Helpers = {
-					x: function(data){
-						if(data.maturity === "Use") {
-							return (widthArray.useStart() + 3) + '%';
-						} else if(data.maturity === "Use with care") {
-							return widthArray.useCareStart() + '%';
-						} else if(data.maturity === "Be informed") {
-							return widthArray.beInformStart() + '%';
-						} else if(data.maturity === "Avoid") {
-							return widthArray.avoidStart() + '%';
-						}
-					},
-					y: function(data){ 
-						var tmp =  (100.0 * data.source.theoretical) / 
-						((data.source.theoretical + data.source.practical) || 1)
-						if(tmp < 5)
-							return '5%';
-						if(tmp > 100.0 - 5)
-							return (100.0 - 5) + '%';
-						return tmp + '%'; 
-					},
-					text: function(data){                    			
-						if(data.movement === 'Stable')
-							return  '\u25CF ' + data.name;
-						else if(data.movement === 'Up')
-							return  '\u25B2 ' + data.name;
-						else  //Down
-							return  '\u25BC ' + data.name;
-					}
-				};
 
             	return {
                     pre: function (scope, element, attrs) {
@@ -158,32 +128,84 @@ var plainView = (function(){
                     	$log.info('post');	                    	
 
 						var render = function(){
-                    		$log.info('rendering...');
+							var svg = d3.select(element[0]).select('svg.plainViewHost');
 
-	                    	var svg = d3.select(element[0]).select('svg.plainViewHost');	
+							var viewModel = (function(){
+								$log.info('creating view model');
+								var viewModel = [];
+								var model = filter(scope.dataSource.items, scope.templ);
+								var maxFontSz = 20,
+									minFontSz = 9;
+
+								var hostWidth = svg.attr('width');
+								var hostHeight = svg.attr('height');
+
+								var maxVotes = model.reduce(function(prev, curr){
+									var tmp = curr.source.theoretical + curr.source.practical;
+									return prev > tmp ? prev : tmp;
+								});								 
+
+								model.map(function(item){									
+									var itemFontSz = minFontSz + Math.floor(((maxFontSz - minFontSz)*
+										(item.source.theoretical + item.source.practical))/maxVotes)
+									
+									var itemText = ''; 						
+									if(item.movement === 'Stable')
+										itemText = '\u25CF ' + item.name;
+									else if(item.movement === 'Up')
+										itemText = '\u25B2 ' + item.name;
+									else  //Down
+										itemText = '\u25BC ' + item.name;
+
+									var itemX = 0;
+									if(item.maturity === "Use") {
+										itemX = (widthArray.useStart() + 3) + '%';
+									} else if(item.maturity === "Use with care") {
+										itemX = widthArray.useCareStart() + '%';
+									} else if(item.maturity === "Be informed") {
+										itemX = widthArray.beInformStart() + '%';
+									} else if(item.maturity === "Avoid") {
+										itemX = widthArray.avoidStart() + '%';
+									}
+
+									var itemY = 0;
+									var theorPerc =  (100.0 * item.source.theoretical) / 
+									((item.source.theoretical + item.source.practical) || 1)
+									if(theorPerc < 5)
+										itemY = '5%';
+									if(theorPerc > 100.0 - 5)
+										itemY = (100.0 - 5) + '%';
+									itemY = theorPerc + '%'; 
+
+									viewModel.push({
+										fontSize: itemFontSz,
+										text: itemText,
+										x: itemX,
+										y: itemY
+									});
+								});
+								return viewModel;
+							})();
+
+                    		$log.info('rendering...');	                    	
 
 							var itemsHost = svg.select('g.items-host');
-
 	                    	itemsHost.selectAll('g')
 	                    		.remove();
 
 	                    	var g = itemsHost.append('g')
 	                    		.selectAll('rect')
-	                    		.data(filter(scope.dataSource.items, scope.templ)) 	                    		                 	 	
+	                    		.data(viewModel) 	                    		                 	 	
                     	 		.enter()		                    	
 	                    		.append('text')	                    		
-	                    		.text(d3Helpers.text)
-	                    		.attr('text-anchor', 'left')
-	                    		.attr('alignment-baseline', 'middle')
-                    	 		.attr('font-size', function(data){
-                    	 			var tmp = (data.source.theoretical + data.source.practical) * 2;
-                    	 			if(tmp < 12)
-                    	 				return 12;
-                    	 			return tmp;
-                    	 		})
-                    	 		.attr('x', d3Helpers.x)
-	                    		.attr('y', d3Helpers.y)
-	                    		.attr('class', 'custom-text radar-text');
+									.text(function(d){ return d.text; })
+									.attr('font-size', function(d){ return d.fontSize; })
+									.attr('x', function(d){ return d.x; })
+									.attr('y', function(d){ return d.y; })
+									.attr('class', 'custom-text radar-text')
+									.attr('text-anchor', 'left')
+									.attr('alignment-baseline', 'middle');
+
 
 	                    	var createSentenses = function (text, symbolsNumberInSentense) {
 	                    	    var sentenses = [];
@@ -225,7 +247,6 @@ var plainView = (function(){
 						        elem.text('');
 						        createBreakableText(elem, text);
 						    });
-
 						};
 
                     	scope.$watch('dataSource', function(){
