@@ -183,8 +183,50 @@ var plainView = (function(){
                     	 		})
                     	 		.attr('x', d3Helpers.x)
 	                    		.attr('y', d3Helpers.y)
-	                    		.attr('class', 'custom-text');
-                    	};
+	                    		.attr('class', 'custom-text radar-text');
+
+	                    	var createSentenses = function (text, symbolsNumberInSentense) {
+	                    	    var sentenses = [];
+	                    	    var words = text.split(' ');
+	                    	    var sent = '';
+	                    	    for (var i = 0; i < words.length; i++) {
+	                    	        var word = words[i];
+
+	                    	        if (word.length < symbolsNumberInSentense) {
+	                    	            sent += word + ' ';
+	                    	            if (sent.length > symbolsNumberInSentense) {
+	                    	                sentenses.push(sent); sent = '';
+	                    	            }
+	                    	        }
+	                    	        else { sentenses.push(sent); sent = word + ' '; }
+	                    	    }
+	                    	    if(sent.length) sentenses.push(sent);
+	                    	    return sentenses;
+	                    	};
+	                    	var symbolsNumberInSentense = 10;
+	                    	var createBreakableText = function (elem, text) {
+	                    	    var sentenses = createSentenses(text, symbolsNumberInSentense);
+	                    	    sentenses.map(function (sent, index) {
+		                            if (index)
+		                                elem.append('tspan')
+		                                    .text(sent)
+		                                    .attr('x', elem.attr('x')).attr('dy', '1em');
+		                            else
+		                                elem.append('tspan')
+		                                    .text(sent)
+		                                    .attr('x', elem.attr('x'));
+		                        });
+	                    	};
+
+	                    	var textElements = itemsHost.selectAll('text.radar-text');
+	                    	textElements.each(function () {
+		                        var elem = d3.select(this);
+						        var text = elem.text();
+						        elem.text('');
+						        createBreakableText(elem, text);
+						    });
+
+						};
 
                     	scope.$watch('dataSource', function(){
                     		render();
