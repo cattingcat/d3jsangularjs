@@ -10,6 +10,7 @@ var plainView = (function(){
 			compile: function (temaplateElement, templateAttrs) {
 				// Helpers
 				var widthArray = [];
+				var areaNames = ["Use",	"Use with care", "Be informed", "Avoid"];
 				var configGrid = function(collection, element){
 					widthArray = [0, 0, 0, 0];
 					widthArray.all = 0;
@@ -155,36 +156,47 @@ var plainView = (function(){
 									else if(item.movement === 'Up')
 										itemText = '\u25B2 ' + item.name;
 									else  //Down
-										itemText = '\u25BC ' + item.name;
-									
-									var itemX = 0;
-									if(item.maturity === "Use") {
-										itemX = (widthArray.useStart() + 3);
-									} else if(item.maturity === "Use with care") {
-										itemX = widthArray.useCareStart();
-									} else if(item.maturity === "Be informed") {
-										itemX = widthArray.beInformStart();
-									} else if(item.maturity === "Avoid") {
-										itemX = widthArray.avoidStart();
-									}
-
-									var itemY = 0;
-									var theorPerc =  (100.0 * item.source.theoretical) / 
-									((item.source.theoretical + item.source.practical) || 1)
-									if(theorPerc < 5)
-										itemY = 5;
-									if(theorPerc > 100.0 - 5)
-										itemY = (100.0 - 5);
-									itemY = theorPerc; 
+										itemText = '\u25BC ' + item.name;									
 
 									viewModel.push({
+										maturity: item.maturity,
 										fontSize: itemFontSz,
 										text: itemText,
-										x: itemX,
-										y: itemY, 
+										theoretical: item.source.theoretical,
+										practical: item.source.practical
 									});
 								});
 								return viewModel;
+							})();
+
+							viewModel = (function(){
+								var res = [];
+								var currAreaStart = 0;
+								for (var i = 0; i < widthArray.length; ++i) {
+									var currArea = areaNames[i];
+									var currAreaWidth = widthArray[i];
+
+									var pack = d3.layout.pack()
+										.size([currAreaWidth - 10, 50])
+										.value(function(d) { return d.fontSize; })
+										
+
+									var currAreaItems = viewModel.filter(function(itm){ return itm.maturity === currArea });
+
+									pack.nodes({name: ' ', children: currAreaItems});
+
+									currAreaItems.map(function(itm){
+										itm.x += currAreaStart; 
+										if(itm.theoretical > itm.practical){
+											itm.y += 50;
+										}
+									});
+
+									res = res.concat(currAreaItems);
+
+									currAreaStart += currAreaWidth;
+								};								
+								return res;
 							})();
 
                     		$log.info('rendering...');	                    	
@@ -206,46 +218,49 @@ var plainView = (function(){
 									.attr('text-anchor', 'left')
 									.attr('alignment-baseline', 'middle');
 
-	                    	var createSentenses = function (text, symbolsNumberInSentense) {
-	                    	    var sentenses = [];
-	                    	    var words = text.split(' ');
-	                    	    var sent = '';
-	                    	    for (var i = 0; i < words.length; i++) {
-	                    	        var word = words[i];
+							// Multiline font
+							(function(){
+								var createSentenses = function (text, symbolsNumberInSentense) {
+								    var sentenses = [];
+								    var words = text.split(' ');
+								    var sent = '';
+								    for (var i = 0; i < words.length; i++) {
+								        var word = words[i];
 
-	                    	        if (word.length < symbolsNumberInSentense) {
-	                    	            sent += word + ' ';
-	                    	            if (sent.length > symbolsNumberInSentense) {
-	                    	                sentenses.push(sent); sent = '';
-	                    	            }
-	                    	        }
-	                    	        else { sentenses.push(sent); sent = word + ' '; }
-	                    	    }
-	                    	    if(sent.length) sentenses.push(sent);
-	                    	    return sentenses;
-	                    	};
-	                    	var symbolsNumberInSentense = 10;
-	                    	var createBreakableText = function (elem, text) {
-	                    	    var sentenses = createSentenses(text, symbolsNumberInSentense);
-	                    	    sentenses.map(function (sent, index) {
-		                            if (index)
-		                                elem.append('tspan')
-		                                    .text(sent)
-		                                    .attr('x', elem.attr('x')).attr('dy', '1em');
-		                            else
-		                                elem.append('tspan')
-		                                    .text(sent)
-		                                    .attr('x', elem.attr('x'));
-		                        });
-	                    	};
+								        if (word.length < symbolsNumberInSentense) {
+								            sent += word + ' ';
+								            if (sent.length > symbolsNumberInSentense) {
+								                sentenses.push(sent); sent = '';
+								            }
+								        }
+								        else { sentenses.push(sent); sent = word + ' '; }
+								    }
+								    if(sent.length) sentenses.push(sent);
+								    return sentenses;
+								};
+								var symbolsNumberInSentense = 10;
+								var createBreakableText = function (elem, text) {
+								    var sentenses = createSentenses(text, symbolsNumberInSentense);
+								    sentenses.map(function (sent, index) {
+								        if (index)
+								            elem.append('tspan')
+								                .text(sent)
+								                .attr('x', elem.attr('x')).attr('dy', '1em');
+								        else
+								            elem.append('tspan')
+								                .text(sent)
+								                .attr('x', elem.attr('x'));
+								    });
+								};
 
-	                    	var textElements = itemsHost.selectAll('text.radar-text');
-	                    	textElements.each(function () {
-		                        var elem = d3.select(this);
-						        var text = elem.text();
-						        elem.text('');
-						        createBreakableText(elem, text);
-						    });
+								var textElements = itemsHost.selectAll('text.radar-text');
+								textElements.each(function () {
+								    var elem = d3.select(this);
+								    var text = elem.text();
+								    elem.text('');
+								    createBreakableText(elem, text);
+								});
+	                    	})();
 						};
 
                     	scope.$watch('dataSource', function(){
