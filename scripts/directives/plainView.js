@@ -177,16 +177,20 @@ var plainView = (function(){
 									var currAreaWidth = widthArray[i];
 
 									var pack = d3.layout.pack()
-										.size([currAreaWidth - 10, 50])
-										.value(function(d) { return d.fontSize; })
+										.size([currAreaWidth - 5, 50])
+										.radius(3.5)
+										.value(function(d) { 
+											return d.practical + d.theoretical; 
+										})
 										
+
 
 									var currAreaItems = viewModel.filter(function(itm){ return itm.maturity === currArea });
 
 									pack.nodes({name: ' ', children: currAreaItems});
 
 									currAreaItems.map(function(itm){
-										itm.x += currAreaStart; 
+										itm.x += currAreaStart + 5; 
 										if(itm.theoretical > itm.practical){
 											itm.y += 50;
 										}
@@ -208,15 +212,19 @@ var plainView = (function(){
 	                    	var g = itemsHost.append('g')
 	                    		.selectAll('rect')
 	                    		.data(viewModel) 	                    		                 	 	
-                    	 		.enter()		                    	
-	                    		.append('text')	                    		
-									.text(function(d){ return d.text; })
-									.attr('font-size', function(d){ return d.fontSize; })
-									.attr('x', function(d){ return d.x + '%'; })
-									.attr('y', function(d){ return d.y + '%'; })
-									.attr('class', 'custom-text radar-text')
-									.attr('text-anchor', 'left')
-									.attr('alignment-baseline', 'middle');
+                    	 		.enter();		                    	
+                    		g.append('text')	                    		
+								.text(function(d){ return d.text; })
+								.attr('font-size', function(d){ return d.fontSize; })
+								.attr('x', function(d){ return d.x + '%'; })
+								.attr('y', function(d){ return d.y + '%'; })
+								.attr('class', 'custom-text radar-text')
+								.attr('text-anchor', 'middle')
+								.attr('alignment-baseline', 'middle');
+								/*g.append('circle')
+									.attr('cx', function(d){ return d.x + '%'; })
+									.attr('cy', function(d){ return d.y + '%'; })
+									.attr('r', function(d){ return d.r + '%'; })*/
 
 							// Multiline font
 							(function(){
