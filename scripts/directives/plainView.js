@@ -176,26 +176,29 @@ var plainView = (function(){
 									var currArea = areaNames[i];
 									var currAreaWidth = widthArray[i];
 									var currAreaItems = viewModel.filter(function(itm){ return itm.maturity === currArea });
-									
-									for(var j = 0; j < 4; ++j){
+
+								    var radius = 3.5;
+								    var areasQuantity = 4;
+                                    var offset = 100 / areasQuantity;
+
+                                    for (var j = 0; j < areasQuantity; ++j) {
 										var pack = d3.layout.pack()
-											.size([currAreaWidth - 5, 25])
-											.radius(3.5)
+											.size([currAreaWidth - 5, offset])
+											.radius(radius)
 											.value(function(d) { 
 												return d.practical + d.theoretical; 
-											});									
+											});
 
-										var tmpItems = currAreaItems.filter(function(itm){
-											var tmp = (itm.theoretical * 100.0 / (itm.theoretical + itm.practical))
-											return tmp <= (j + 1) * 25 && tmp > j * 25;
-										})
-										
+                                        var tmpItems = currAreaItems.filter(function(itm) {
+                                            var tmp = (itm.theoretical * 100.0 / (itm.theoretical + itm.practical));
+                                            return tmp <= (j + 1) * offset && tmp > j * offset;
+                                        });
 
 										pack.nodes({name: ' ', children: tmpItems});
 
 										tmpItems.map(function(itm){
 											itm.x += currAreaStart + 5; 
-											itm.y += j*25;
+											itm.y += j * offset;
 										});
 
 										res = res.concat(tmpItems);
