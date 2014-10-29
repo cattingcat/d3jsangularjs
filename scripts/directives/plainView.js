@@ -156,32 +156,32 @@ var plainView = (function(){
 										itemText = '\u25B2 ' + item.name;
 									else  //Down
 										itemText = '\u25BC ' + item.name;
-
+									
 									var itemX = 0;
 									if(item.maturity === "Use") {
-										itemX = (widthArray.useStart() + 3) + '%';
+										itemX = (widthArray.useStart() + 3);
 									} else if(item.maturity === "Use with care") {
-										itemX = widthArray.useCareStart() + '%';
+										itemX = widthArray.useCareStart();
 									} else if(item.maturity === "Be informed") {
-										itemX = widthArray.beInformStart() + '%';
+										itemX = widthArray.beInformStart();
 									} else if(item.maturity === "Avoid") {
-										itemX = widthArray.avoidStart() + '%';
+										itemX = widthArray.avoidStart();
 									}
 
 									var itemY = 0;
 									var theorPerc =  (100.0 * item.source.theoretical) / 
 									((item.source.theoretical + item.source.practical) || 1)
 									if(theorPerc < 5)
-										itemY = '5%';
+										itemY = 5;
 									if(theorPerc > 100.0 - 5)
-										itemY = (100.0 - 5) + '%';
-									itemY = theorPerc + '%'; 
+										itemY = (100.0 - 5);
+									itemY = theorPerc; 
 
 									viewModel.push({
 										fontSize: itemFontSz,
 										text: itemText,
 										x: itemX,
-										y: itemY
+										y: itemY, 
 									});
 								});
 								return viewModel;
@@ -200,12 +200,11 @@ var plainView = (function(){
 	                    		.append('text')	                    		
 									.text(function(d){ return d.text; })
 									.attr('font-size', function(d){ return d.fontSize; })
-									.attr('x', function(d){ return d.x; })
-									.attr('y', function(d){ return d.y; })
+									.attr('x', function(d){ return d.x + '%'; })
+									.attr('y', function(d){ return d.y + '%'; })
 									.attr('class', 'custom-text radar-text')
 									.attr('text-anchor', 'left')
 									.attr('alignment-baseline', 'middle');
-
 
 	                    	var createSentenses = function (text, symbolsNumberInSentense) {
 	                    	    var sentenses = [];
