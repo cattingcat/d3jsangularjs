@@ -10,29 +10,34 @@
 	-->
 
 	<div class="radar-svg radar-container-item">
-		<svg width="500" height="500" class="circle-view-host">
+		<svg width="500" height="500" class="circle-view-svg">
+			<defs>
+				<polygon points="-7,-7 7,-7 0,7" fill="#555555" id="down"/>
+				<polygon points="-7,7 7,7 0,-7" fill="#555555" id="up"/>
+				<circle r="7" fill="#555555" id="stable"/>
+			</defs>
 			<circle cx="0" cy="100%" r="99%" fill="#FFE6ED" />
 			<circle cx="0" cy="100%" r="87%" fill="#FDEEEC" class="circle-2" />
 			<circle cx="0" cy="100%" r="75%" fill="#FDF7ED" class="circle-1" />
 			<circle cx="0" cy="100%" r="50%" fill="#EEF5DD" class="circle-0"/>
-
-			<!-- Legend -->
-			<svg x="50%" y="50%">
-				<g>
-					<text x="0" y="15" fill="black"> Trends </text>
-					<circle r="5" cx="55" cy="10" fill="black" />
-				</g>
-			</svg>
+			<g class="item-host">
+			</g>
 		</svg>
 	</div>
 </div>
 
-<!--   Classes which usings on JS
-	circle-0
-	circle-1
-	circle-2
+<!-- ids which usings on JS
+	.circle-0
+	.circle-1
+	.circle-2
 
-	circle-view-host
+	.item-host
+
+	.circle-view-svg
+
+	#up
+	#stable
+	#down
  -->
 
 
