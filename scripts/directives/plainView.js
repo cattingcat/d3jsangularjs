@@ -1,6 +1,6 @@
 'use strict';
-var plainView = (function(){
-	var factory = function($log){
+var plainView = (function() {
+	var factory = function($log) {
 
 		var directiveObj = {	
 			templateUrl: '/scripts/directives/plainView.tmpl.html',	
@@ -9,66 +9,87 @@ var plainView = (function(){
 			},
 			compile: function (temaplateElement, templateAttrs) {
 				// Helpers
-				var widthArray = [];
+				var widthArray = {};
 				var areaNames = ["Use",	"Use with care", "Be informed", "Avoid"];
-				var configGrid = function(collection, element){
-					widthArray = [0, 0, 0, 0];
-					widthArray.all = 0;
-					widthArray.useStart = function(){
+				var configGrid = function(collection, element) {
+					widthArray.arr = [0, 0, 0, 0];
+					var all = 0;
+					widthArray.useStart = function() {
 						return 0;
 					}
-					widthArray.useWidth = function(){
-						return this[0];
+					widthArray.useWidth = function() {
+						return this.arr[0];
 					}
-					widthArray.useCareStart = function(){
+					widthArray.useCareStart = function() {
 						return this.useStart() + this.useWidth();
 					}
-					widthArray.useCareWidth = function(){
-						return this[1];
+					widthArray.useCareWidth = function() {
+						return this.arr[1];
 					}
 
-					widthArray.beInformStart = function(){
+					widthArray.beInformStart = function() {
 						return this.useCareStart() + this.useCareWidth();
 					}
-					widthArray.beInformWidth = function(){
-						return this[2];
+					widthArray.beInformWidth = function() {
+						return this.arr[2];
 					}
 
-					widthArray.avoidStart = function(){
+					widthArray.avoidStart = function() {
 						return this.beInformStart() + this.beInformWidth();
 					}
-					widthArray.avoidWidth = function(){
-						return this[3];
+					widthArray.avoidWidth = function() {
+						return this.arr[3];
 					}
 
 
 					var minWidth = 15.0;
 
-					collection.map(function(d){
+					collection.map(function(d) {
 						if(d.maturity === "Use")
-							++widthArray[0];
+							++widthArray.arr[0];
 						else if(d.maturity === "Use with care")
-							++widthArray[1];
+							++widthArray.arr[1];
 						else if(d.maturity === "Be informed")
-							++widthArray[2];
+							++widthArray.arr[2];
 						else if(d.maturity === "Avoid")
-							++widthArray[3];                			
-						++widthArray.all;
+							++widthArray.arr[3];                			
+						++all;
 					});
-					for (var i = widthArray.length - 1; i >= 0; i--) {
-						widthArray[i] = widthArray[i] * 100.0 / widthArray.all;
-					};		
-					for (i = widthArray.length - 1; i >= 0; i--) {
-						if(widthArray[i] < minWidth){
-							var rest = widthArray[i]
-							widthArray[i] = minWidth;
-							for (var j = widthArray.length - 1; j >= 0; j--) {
-								if(j != i && widthArray[j] > minWidth){
-									widthArray[j] -= (minWidth - rest) / 3.0;
-								}
+
+					var percentArr = [];
+					var balance = 100;
+
+					var isNotZero = widthArray.arr.reduce(function(prev, curr) {
+						return (prev || curr);
+					});
+					if(!isNotZero) {
+						for (var i = widthArray.arr.length - 1; i >= 0; i--) {
+							widthArray.arr[i] = 1;
+						}
+						all = 4;
+					}
+
+					for (var i = widthArray.arr.length - 1; i >= 0; i--) {
+						var item = widthArray.arr[i];
+						if(item == 0) {
+							percentArr[i] = minWidth;
+							balance -= minWidth;
+						}
+					};
+					for (var i = widthArray.arr.length - 1; i >= 0; i--) {
+						var item = widthArray.arr[i];
+						if(item != 0) {
+							var tmp = item * balance / all;
+							if(tmp < minWidth) {
+								percentArr[i] = minWidth;
+								--all;
+							} else {
+								percentArr[i] = tmp;
 							}
-						}						
-					}		
+						}
+					}
+					widthArray.arr = percentArr;
+
 
 					var d3Element = d3.select(element);
 					d3Element.select('rect.col-use')
@@ -102,13 +123,13 @@ var plainView = (function(){
 					d3Element.select('text.avoid')
 						.attr('x', (widthArray.avoidStart() + widthArray.avoidWidth() / 2) + '%');
 				};
-				var filter = function(collection, template){
+				var filter = function(collection, template) {
 					var res = [];
 					if(!template)
 						return collection;
-					collection.map(function(item){
+					collection.map(function(item) {
 						if((item.movement === template.trend || template.trend === 'All') && 
-							(item.maturity === template.recommendation || template.recommendation === 'All')){
+							(item.maturity === template.recommendation || template.recommendation === 'All')) {
 							res.push(item);
 						}				
 					});
@@ -128,25 +149,32 @@ var plainView = (function(){
                     post: function(scope, element, attrs) { 
                     	$log.info('post');	                    	
 
-						var render = function(){
+						var render = function(model) {
 							var svg = d3.select(element[0]).select('svg.plainViewHost');
+							var itemsHost = svg.select('g.items-host');
+							itemsHost.selectAll('g')
+								.remove();
 
-							var viewModel = (function(){
+							if(model.length === 0) {
+								return;
+							}
+
+							var viewModel = (function() {
 								$log.info('creating view model');
 								var viewModel = [];
-								var model = filter(scope.dataSource.items, scope.templ);
+								
 								var maxFontSz = 20,
 									minFontSz = 9;
 
 								var hostWidth = svg.attr('width');
 								var hostHeight = svg.attr('height');
 
-								var maxVotes = model.reduce(function(prev, curr){
+								var maxVotes = model.reduce(function(prev, curr) {
 									var tmp = curr.source.theoretical + curr.source.practical;
 									return prev > tmp ? prev : tmp;
 								});								 
 
-								model.map(function(item){									
+								model.map(function(item) {									
 									var itemFontSz = minFontSz + Math.floor(((maxFontSz - minFontSz)*
 										(item.source.theoretical + item.source.practical))/maxVotes)
 									
@@ -169,13 +197,13 @@ var plainView = (function(){
 								return viewModel;
 							})();
 
-							viewModel = (function(){
+							viewModel = (function() {
 								var res = [];
 								var currAreaStart = 0;
-								for (var i = 0; i < widthArray.length; ++i) {
+								for (var i = 0; i < widthArray.arr.length; ++i) {
 									var currArea = areaNames[i];
-									var currAreaWidth = widthArray[i];
-									var currAreaItems = viewModel.filter(function(itm){ return itm.maturity === currArea });
+									var currAreaWidth = widthArray.arr[i];
+									var currAreaItems = viewModel.filter(function(itm) { return itm.maturity === currArea });
 
 								    var radius = 3.5;
 								    var areasQuantity = 4;
@@ -196,7 +224,7 @@ var plainView = (function(){
 
 										pack.nodes({name: ' ', children: tmpItems});
 
-										tmpItems.map(function(itm){
+										tmpItems.map(function(itm) {
 											itm.x += currAreaStart + 5; 
 											itm.y += j * offset;
 										});
@@ -211,29 +239,27 @@ var plainView = (function(){
 
                     		$log.info('rendering...');	                    	
 
-							var itemsHost = svg.select('g.items-host');
-	                    	itemsHost.selectAll('g')
-	                    		.remove();
+
 
 	                    	var g = itemsHost.append('g')
 	                    		.selectAll('rect')
 	                    		.data(viewModel) 	                    		                 	 	
                     	 		.enter();		                    	
                     		g.append('text')	                    		
-								.text(function(d){ return d.text; })
-								.attr('font-size', function(d){ return d.fontSize; })
-								.attr('x', function(d){ return d.x + '%'; })
-								.attr('y', function(d){ return d.y + '%'; })
+								.text(function(d) { return d.text; })
+								.attr('font-size', function(d) { return d.fontSize; })
+								.attr('x', function(d) { return d.x + '%'; })
+								.attr('y', function(d) { return d.y + '%'; })
 								.attr('class', 'custom-text radar-text')
 								.attr('text-anchor', 'middle')
 								.attr('alignment-baseline', 'middle');
 								/*g.append('circle')
-									.attr('cx', function(d){ return d.x + '%'; })
-									.attr('cy', function(d){ return d.y + '%'; })
-									.attr('r', function(d){ return d.r + '%'; })*/
+									.attr('cx', function(d) { return d.x + '%'; })
+									.attr('cy', function(d) { return d.y + '%'; })
+									.attr('r', function(d) { return d.r + '%'; })*/
 
 							// Multiline font
-							(function(){
+							(function() {
 								var createSentenses = function (text, symbolsNumberInSentense) {
 								    var sentenses = [];
 								    var words = text.split(' ');
@@ -277,18 +303,23 @@ var plainView = (function(){
 	                    	})();
 						};
 
-                    	scope.$watch('dataSource', function(){
-                    		render();
+                    	scope.$watch('dataSource', function() {
+                    		var model = filter(scope.dataSource.items, scope.templ);
+                    		configGrid(model, element[0]);
+							render(model);
                     	});
 
-                    	scope.$on('dataSourceUpdated', function(){
-                    		configGrid(scope.dataSource.items, element[0]);
-							render();
+                    	scope.$on('dataSourceUpdated', function() {
+                    		var model = filter(scope.dataSource.items, scope.templ);
+                    		configGrid(model, element[0]);
+							render(model);
                     	});
-                    	scope.$on('dataSourceFilter', function(e, template){
+                    	scope.$on('dataSourceFilter', function(e, template) {
 							$log.debug(template.trend);
 							scope.templ = template;
-							render();
+							var model = filter(scope.dataSource.items, scope.templ);
+							configGrid(model, element[0]);
+							render(model);
                     	});
                     }        				
                 }
