@@ -1,24 +1,20 @@
 
-<div class="radar-container">	
+<div class="radar-container">
+	<!--
 	<div class="tree radar-container-item">
 		<legend> DataSource: {{dataSource.name}} </legend>
 		<div ng-repeat="item in dataSource.data">
 			{{item}}
 		</div>
 	</div>
+	-->
 
 	<div class="radar-svg radar-container-item">
-		<svg width="500" height="500" id="circleViewHost">
-			<circle cx="0" cy="100%" r="98%" fill="#FFE6ED"/>
-			<circle cx="0" cy="100%" r="87%" fill="#FDEEEC"/>
-			<circle cx="0" cy="100%" r="75%" fill="#FDF7ED"/>
-			<circle cx="0" cy="100%" r="50%" fill="#EEF5DD"/>
-
-			<text x="50" y="20" fill="purple" font-size="12">
-				<tspan>Line 1</tspan>
-				<tspan x="0%" dy="1em">Line 2</tspan>
-				<tspan x="0%" dy="1em">Line 3</tspan>
-			</text>
+		<svg width="500" height="500" class="circle-view-host">
+			<circle cx="0" cy="100%" r="99%" fill="#FFE6ED" />
+			<circle cx="0" cy="100%" r="87%" fill="#FDEEEC" class="circle-2" />
+			<circle cx="0" cy="100%" r="75%" fill="#FDF7ED" class="circle-1" />
+			<circle cx="0" cy="100%" r="50%" fill="#EEF5DD" class="circle-0"/>
 
 			<!-- Legend -->
 			<svg x="50%" y="50%">
@@ -28,10 +24,17 @@
 				</g>
 			</svg>
 		</svg>
-		<!-- ox legend -->
-		<!-- <text x="90%" y="90%" fill="red"> Hello world!</text> -->
 	</div>
 </div>
+
+<!--   Classes which usings on JS
+	circle-0
+	circle-1
+	circle-2
+
+	circle-view-host
+ -->
+
 
 
 
