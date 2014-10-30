@@ -29,7 +29,7 @@
 		</div>
 	
 
-		<div ng-init="view='plain'">
+		<div ng-init="view='circle'">
 			<input type="radio" ng-model="view" value="circle" checked> Circle </input>
 			<input type="radio" ng-model="view" value="table"> Table </input>
 			<input type="radio" ng-model="view" value="plain"> Plain </input>
@@ -46,7 +46,7 @@
 			</div>
 
 			<div ng-switch-when="circle" class="radar-container">	
-				<div circle-view="data"></div>
+				<div circle-view="circleData"></div>
 			</div>
 
 		</div>
