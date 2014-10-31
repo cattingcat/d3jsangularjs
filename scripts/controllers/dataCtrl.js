@@ -143,6 +143,20 @@ var dataCtrl = (function(){
 
 		$scope.circleData = [
 			{
+				"quadrant" : "Test",
+				"items" : [
+					{
+						"name" : "Velocity(AppFabric Cache)",
+						"movement" : "Stable",
+						"maturity" : "Use",
+						"source" : {
+							"practical" : 0,
+							"theoretical" : 4
+						},
+					},
+				]
+			},
+			{
 				"quadrant" : "Cache",
 				"items" : [
 					{

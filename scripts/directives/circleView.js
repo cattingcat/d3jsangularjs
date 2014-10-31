@@ -1,7 +1,16 @@
 'use strict';
 var circleView = (function() {
 	var factory = function($log) {
-		var i = 1;
+		function layoutItems(collection, ri, rs, re, as, ae) {
+			if(collection.length != 0) {
+				$log.debug(collection[0].maturity + ' ' + rs + ' ' + re + ' ' + as + ' ' + ae);
+			} else {
+				$log.info('empty collection');
+				return;
+			}
+
+
+		}
 		var o = {
 			templateUrl: '/scripts/directives/circleView.tmpl.html',
 			scope:{
@@ -75,7 +84,6 @@ var circleView = (function() {
 
 				return {
 					pre: function (scope, element, attrs) {
-						$log.info('pre');
 						if(!scope.dataSource)
 							$log.error('datasource is undefined');
 						var svg = d3.select(element[0]).select('svg.circle-view-svg');
@@ -87,39 +95,60 @@ var circleView = (function() {
 						segmentsWidth = configureSectors(svg, items);
 					},
 					post: function(scope, element, attrs) { 
-						$log.info('post');
 						var svg = d3.select(element[0]).select('svg.circle-view-svg');
 						var itemHost = svg.select('g.item-host');
+						// SVG Radius (from tmpl.html)
+						var R = svg.attr('width');
+						var itemRadius = 7;
 
 						var viewModel = (function() {
-							var baseAngle = 90;
+							var baseAngle = Math.PI / 2;
 							var categoryCount = scope.dataSource.length;
 							var anglePerCategory = baseAngle / categoryCount;
 
 							var vm = [];
 							scope.dataSource.forEach(function(o, i) {
-								var currentAngle = anglePerCategory * (i + 0.5);
-								o.items.forEach(function(o) {
-									var radiusEnd = 0;
-									var radiusStart = 0.5;
-									var i = 0;
-									for(var prop in maturities)	{
-										radiusEnd += segmentsWidth[i];
-										if(o.maturity === maturities[prop]) {
-											break;
-										}
-										radiusStart += segmentsWidth[i];
-										++i;
-									}
-									vm.push({
-										text: o.name,
-										maturity: o.maturity,
-										trend: o.movement,
-										rs: radiusStart,
-										re: radiusEnd,
-										angle: currentAngle
+								var startCategoryAngle = anglePerCategory * i;
+								var endCategoryAngle = anglePerCategory * (i + 1);
+
+								// debug lines
+								itemHost
+									.append('line')
+									.attr('x1', 0)
+									.attr('y1', '100%')
+									.attr('x2', (100 * Math.cos(startCategoryAngle)) + '%')
+									.attr('y2', (100 - (100 * Math.sin(startCategoryAngle))) + '%')
+									.attr('stroke', 'black');
+								itemHost
+									.append('line')
+									.attr('x1', 0)
+									.attr('y1', '100%')
+									.attr('x2', (100 * Math.cos(endCategoryAngle)) + '%')
+									.attr('y2', (100 - (100 * Math.sin(endCategoryAngle))) + '%')
+									.attr('stroke', 'black');
+
+								// each sectors
+								var radiusStart = 0.3;
+								var radiusEnd = 0;
+								var wArrayIndex = 0;
+								for(var prop in maturities)	{
+									radiusEnd += segmentsWidth[wArrayIndex];
+									var currentMaturity = maturities[prop];
+									// draw each item group
+									var itemGroup = o.items.filter(function(item) {
+										return item.maturity === currentMaturity
 									});
-								});
+
+									var rs = R * radiusStart / 100.0,
+										re = R * radiusEnd / 100.0;
+
+									var viewModelItems = layoutItems(itemGroup, itemRadius,
+										rs, re, startCategoryAngle, endCategoryAngle);
+									vm.push(viewModelItems);
+
+									radiusStart += segmentsWidth[wArrayIndex];
+									++wArrayIndex;
+								}
 							});
 							return vm;
 						})();
@@ -132,20 +161,15 @@ var circleView = (function() {
 								return '#' + d.trend.toLowerCase();
 							})
 							.attr('x', function(d) {
-								return (d.re * Math.cos(Math.PI * d.angle / 180)) + '%';
+								return d.x;
 							})
 							.attr('y', function(d) {
-								return  (100 - (d.re * Math.sin(Math.PI * d.angle / 180))) + '%';
-							})
-							.attr('data-debug', function(d) {
-								return d.text + ' ' + d.maturity;
-							})
-
+								return  (100 - d.y);
+							});
 
 						scope.$watch('dataSource', function() {
 							$log.debug('$watch');
 						});
-
 					}
 				}
 			}
