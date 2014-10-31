@@ -146,7 +146,7 @@ var dataCtrl = (function(){
 				"quadrant" : "Test",
 				"items" : [
 					{
-						"name" : "Velocity(AppFabric Cache)",
+						"name" : "Test- Velocity",
 						"movement" : "Stable",
 						"maturity" : "Use",
 						"source" : {
@@ -160,7 +160,7 @@ var dataCtrl = (function(){
 				"quadrant" : "Cache",
 				"items" : [
 					{
-						"name" : "Velocity(AppFabric Cache)",
+						"name" : "Cache- Velocity",
 						"movement" : "Stable",
 						"maturity" : "Use",
 						"source" : {
@@ -169,7 +169,106 @@ var dataCtrl = (function(){
 						},
 					},
 					{
-						"name" : "Redis",
+						"name" : "Cache- Velocity",
+						"movement" : "Stable",
+						"maturity" : "Use",
+						"source" : {
+							"practical" : 0,
+							"theoretical" : 4
+						},
+					},
+					{
+						"name" : "Cache- Velocity",
+						"movement" : "Stable",
+						"maturity" : "Use",
+						"source" : {
+							"practical" : 0,
+							"theoretical" : 4
+						},
+					},
+					{
+						"name" : "Cache- Velocity",
+						"movement" : "Stable",
+						"maturity" : "Use",
+						"source" : {
+							"practical" : 0,
+							"theoretical" : 4
+						},
+					},
+					{
+						"name" : "Cache- Velocity",
+						"movement" : "Stable",
+						"maturity" : "Use",
+						"source" : {
+							"practical" : 0,
+							"theoretical" : 4
+						},
+					},
+					{
+						"name" : "Cache- Velocity",
+						"movement" : "Stable",
+						"maturity" : "Use",
+						"source" : {
+							"practical" : 0,
+							"theoretical" : 4
+						},
+					},
+					{
+						"name" : "Cache- Velocity",
+						"movement" : "Stable",
+						"maturity" : "Use",
+						"source" : {
+							"practical" : 0,
+							"theoretical" : 4
+						},
+					},
+					{
+						"name" : "Cache- Velocity",
+						"movement" : "Stable",
+						"maturity" : "Use",
+						"source" : {
+							"practical" : 0,
+							"theoretical" : 4
+						},
+					},
+					{
+						"name" : "Cache- Velocity",
+						"movement" : "Stable",
+						"maturity" : "Use",
+						"source" : {
+							"practical" : 0,
+							"theoretical" : 4
+						},
+					},
+					{
+						"name" : "Cache- Velocity",
+						"movement" : "Stable",
+						"maturity" : "Use",
+						"source" : {
+							"practical" : 0,
+							"theoretical" : 4
+						},
+					},
+					{
+						"name" : "Cache- Velocity",
+						"movement" : "Stable",
+						"maturity" : "Use",
+						"source" : {
+							"practical" : 0,
+							"theoretical" : 4
+						},
+					},
+					{
+						"name" : "Cache- Velocity",
+						"movement" : "Stable",
+						"maturity" : "Use",
+						"source" : {
+							"practical" : 0,
+							"theoretical" : 4
+						},
+					},
+					{
+						"name" : "Cache- Redis",
 						"movement" : "Stable",
 						"maturity" : "Use with care",
 						"source" : {
@@ -178,7 +277,7 @@ var dataCtrl = (function(){
 						},
 					},
 					{
-						"name" : "Azure Cache Service",
+						"name" : "Cache- Azure Cache Service",
 						"movement" : "Up",
 						"maturity" : "Use with care",
 						"source" : {
@@ -187,7 +286,7 @@ var dataCtrl = (function(){
 						},
 					},
 					{
-						"name" : "Memcached",
+						"name" : "Cache- Memcached",
 						"movement" : "Stable",
 						"maturity" : "Use",
 						"source" : {
@@ -201,7 +300,7 @@ var dataCtrl = (function(){
 				"quadrant":"Custom components",
 				"items":[
 					{
-						"name":"Native:Mobile",
+						"name":"Custom- Native:Mobile",
 						"movement":"Up",
 						"maturity":"Use",
 						"source": {
@@ -211,7 +310,7 @@ var dataCtrl = (function(){
 					},
 
 					{
-						"name":"Native:Desktop",
+						"name":"Custom- Native:Desktop",
 						"movement":"Down",
 						"maturity":"Use",
 						"source": {
@@ -221,7 +320,7 @@ var dataCtrl = (function(){
 					},
 
 					{
-						"name":"Web Services (no UI)",
+						"name":"Custom- Web Services (no UI)",
 						"movement":"Stable",
 						"maturity":"Use",
 						"source": {
@@ -231,7 +330,7 @@ var dataCtrl = (function(){
 					},
 
 					{
-						"name":"System Service (no UI)",
+						"name":"Custom- System Service (no UI)",
 						"movement":"Stable",
 						"maturity":"Avoid",
 						"source": {
@@ -241,7 +340,7 @@ var dataCtrl = (function(){
 					},
 
 					{
-						"name":"Web:Mobile",
+						"name":"Custom- Web:Mobile",
 						"movement":"Up",
 						"maturity":"Avoid",
 						"source": {
@@ -250,7 +349,7 @@ var dataCtrl = (function(){
 						},
 					},
 					{
-						"name":"Web:Desktop",
+						"name":"Custom- Web:Desktop",
 						"movement":"Stable",
 						"maturity":"Avoid",
 						"source": {
@@ -259,7 +358,7 @@ var dataCtrl = (function(){
 						},
 					},
 					{
-						"name":"Wearable technologies",
+						"name":"Custom- Wearable technologies",
 						"movement":"Up",
 						"maturity":"Be informed",
 						"source": {

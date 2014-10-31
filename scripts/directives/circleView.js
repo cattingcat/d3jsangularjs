@@ -1,16 +1,7 @@
 'use strict';
 var circleView = (function() {
 	var factory = function($log) {
-		function layoutItems(collection, ri, rs, re, as, ae) {
-			if(collection.length != 0) {
-				$log.debug(collection[0].maturity + ' ' + rs + ' ' + re + ' ' + as + ' ' + ae);
-			} else {
-				$log.info('empty collection');
-				return;
-			}
 
-
-		}
 		var o = {
 			templateUrl: '/scripts/directives/circleView.tmpl.html',
 			scope:{
@@ -46,7 +37,7 @@ var circleView = (function() {
 						++countAll;
 					});
 
-					var minSegmentWidth = 10;  //%
+					var minSegmentWidth = 15;  //%
 					var maxWidth = 100;  //%
 					var widthCollection = [0, 0, 0, 0];
 					var segments = 4;
@@ -61,14 +52,21 @@ var circleView = (function() {
 					elementCountCollection.forEach(function(o, i) {
 						if(o != 0) {
 							var tmp = maxWidth * o / countAll;
+							if(tmp <= minSegmentWidth) {
+								widthCollection[i] = minSegmentWidth;
+								maxWidth -= minSegmentWidth;
+								countAll -= o;
+							}
+						}
+					});
+
+					elementCountCollection.forEach(function(o, i) {
+						if(o != 0) {
+							var tmp = maxWidth * o / countAll;
 							if(tmp > minSegmentWidth) {
 								widthCollection[i] = tmp;
 								maxWidth -= tmp;
-							} else {
-								widthCollection[i] = minSegmentWidth;
-								maxWidth -= minSegmentWidth;
 							}
-							countAll -= o;
 						}
 					});
 
@@ -81,6 +79,49 @@ var circleView = (function() {
 					return widthCollection;
 				};
 
+				function layoutItems(collection, ri, rs, re, as, ae) {
+					if(collection.length != 0) {
+						$log.debug(collection[0].maturity + ' ' + rs + ' ' + re + ' ' + as + ' ' + ae);
+					} else {
+						$log.info('empty collection');
+						return [];
+					}
+					var vm = [];
+
+					var Di = ri * 2;  // item diameter
+					var DiWithMargin = Di + 12;
+
+					var itemIndex = 0;
+
+					for(var ir = rs + ri; ir < re - ri && itemIndex < collection.length; ir += DiWithMargin) {
+						//var currentC = (2 * Math.PI * ir) * (ae - as) / Math.PI;
+						var currentC = 2 * ir * (ae - as);
+
+						var itemOnRadius = Math.floor(currentC / DiWithMargin);
+
+						if(itemOnRadius > 0) {
+							var angleForItem = (ae - as) / itemOnRadius;
+							for(var ia = as + angleForItem; ia < ae; ia += angleForItem) {
+								var blItem = collection[itemIndex];
+
+								var vmItem = {
+									trend: blItem.movement,
+									x: ir * Math.cos(ia),
+									y: ir * Math.sin(ia),
+									name: blItem.name
+								};
+								vm.push(vmItem);
+
+								++itemIndex;
+								if(itemIndex >= collection.length) {
+									break;
+								}
+							}
+
+						}
+					}
+					return vm;
+				}
 
 				return {
 					pre: function (scope, element, attrs) {
@@ -111,22 +152,6 @@ var circleView = (function() {
 								var startCategoryAngle = anglePerCategory * i;
 								var endCategoryAngle = anglePerCategory * (i + 1);
 
-								// debug lines
-								itemHost
-									.append('line')
-									.attr('x1', 0)
-									.attr('y1', '100%')
-									.attr('x2', (100 * Math.cos(startCategoryAngle)) + '%')
-									.attr('y2', (100 - (100 * Math.sin(startCategoryAngle))) + '%')
-									.attr('stroke', 'black');
-								itemHost
-									.append('line')
-									.attr('x1', 0)
-									.attr('y1', '100%')
-									.attr('x2', (100 * Math.cos(endCategoryAngle)) + '%')
-									.attr('y2', (100 - (100 * Math.sin(endCategoryAngle))) + '%')
-									.attr('stroke', 'black');
-
 								// each sectors
 								var radiusStart = 0.3;
 								var radiusEnd = 0;
@@ -144,7 +169,7 @@ var circleView = (function() {
 
 									var viewModelItems = layoutItems(itemGroup, itemRadius,
 										rs, re, startCategoryAngle, endCategoryAngle);
-									vm.push(viewModelItems);
+									vm = vm.concat(viewModelItems);
 
 									radiusStart += segmentsWidth[wArrayIndex];
 									++wArrayIndex;
@@ -157,15 +182,27 @@ var circleView = (function() {
 							.data(viewModel)
 							.enter()
 							.append('use')
-							.attr('xlink:href', function(d) {
-								return '#' + d.trend.toLowerCase();
-							})
-							.attr('x', function(d) {
-								return d.x;
-							})
-							.attr('y', function(d) {
-								return  (100 - d.y);
-							});
+								.attr('xlink:href', function(d) {
+									return '#' + d.trend.toLowerCase();
+								})
+								.attr('x', function(d) {
+									return d.x;
+								})
+								.attr('y', function(d) {
+									return  (R - d.y);
+								})
+								.style('fill', '#555555')
+								.on('mouseenter', function(d){
+									var elem = d3.select(this);
+									elem.style('fill', 'red');
+								})
+								.on('mouseleave', function(d){
+									var elem = d3.select(this);
+									elem.style('fill', '#555555');
+								})
+								.attr('data-debug', function(d){
+									return d.name;
+								});
 
 						scope.$watch('dataSource', function() {
 							$log.debug('$watch');
