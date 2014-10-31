@@ -192,6 +192,7 @@ var circleView = (function() {
 									return  (R - d.y);
 								})
 								.style('fill', '#555555')
+								.style('cursor', 'pointer')
 								.on('mouseenter', function(d){
 									var elem = d3.select(this);
 									elem.style('fill', 'red');
