@@ -1,9 +1,3 @@
-svg.circle-view-svg {
-	border-left: 1px solid gray;
-	border-bottom: 1px solid gray;
-	display: inline-block;
-}
-
 svg.plainView {
 	border: 1px solid gray;
 	display: inline-block;
@@ -30,9 +24,10 @@ text.avoid {
 	fill : #FF3C73;
 }
 
-line{
+line {
     shape-rendering : crispEdges;
 }
+
 div.radar-container {
 	width: 90%;
 	display: inline-block;
@@ -42,20 +37,33 @@ div.radar-container {
 div.radar-container-item {
 	display: inline-block;
 	vertical-align: top;
-		/*tmp*/
-	/*border: 1px solid gray;*/
+}
+
+/* circle view classes */
+div.tree {
+	width: 20%;
+	height: 100%;
+}
+
+svg.circle-view-svg {
+	border-left: 1px solid gray;
+	border-bottom: 1px solid gray;
+	display: inline-block;
 }
 
 div.radar-svg {
 	width: 50%;
 }
 
-div.tree {
-	width: 20%;
-	height: 100%;
+.selected-list-item {
+	background-color: #b0c4de;
 }
 
-			
-			
-			
-			
+g.item-host > use {
+	cursor: pointer;
+	fill: #555555;
+}
+
+g.item-host > use.selected-radar-item {
+	fill: #FF0000;
+}

@@ -1,6 +1,6 @@
 'use strict';
 var circleView = (function() {
-	var factory = function($log) {
+	var factory = function($compile, $document, $window, $log) {
 
 		var o = {
 			templateUrl: '/scripts/directives/circleView.tmpl.html',
@@ -103,7 +103,7 @@ var circleView = (function() {
 							var angleForItem = (ae - as) / itemOnRadius;
 							for(var ia = as + angleForItem; ia < ae; ia += angleForItem) {
 								var blItem = collection[itemIndex];
-
+								// fields
 								var vmItem = {
 									trend: blItem.movement,
 									x: ir * Math.cos(ia),
@@ -134,6 +134,18 @@ var circleView = (function() {
 							items = items.concat(o.items);
 						});
 						segmentsWidth = configureSectors(svg, items);
+
+						scope.selectedItem = null;
+						scope.select = function(itemName){
+							var allUseItems = svg.selectAll('g.item-host > use');
+							allUseItems.classed('selected-radar-item', false);
+
+							var viewItems = svg.selectAll('g.item-host > use[data-itemname="' +
+							 itemName + '"]');
+							viewItems.classed('selected-radar-item', true);
+
+							scope.selectedItem = itemName;
+						};
 					},
 					post: function(scope, element, attrs) { 
 						var svg = d3.select(element[0]).select('svg.circle-view-svg');
@@ -191,17 +203,21 @@ var circleView = (function() {
 								.attr('y', function(d) {
 									return  (R - d.y);
 								})
-								.style('fill', '#555555')
-								.style('cursor', 'pointer')
 								.on('mouseenter', function(d){
 									var elem = d3.select(this);
-									elem.style('fill', 'red');
+									elem.classed('selected-radar-item', true);
+
+									scope.selectedItem = d.name;
+									scope.$apply();
 								})
 								.on('mouseleave', function(d){
 									var elem = d3.select(this);
-									elem.style('fill', '#555555');
+									elem.classed('selected-radar-item', false);
+
+									scope.selectedItem = null;
+									scope.$apply();
 								})
-								.attr('data-debug', function(d){
+								.attr('data-itemname', function(d){
 									return d.name;
 								});
 
@@ -214,5 +230,5 @@ var circleView = (function() {
 		};
 		return o;
 	}
-	return ['$log', factory];
+	return ['$compile', '$document', '$window', '$log', factory];
 })();

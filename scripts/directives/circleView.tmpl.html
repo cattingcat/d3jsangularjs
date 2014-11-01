@@ -3,8 +3,16 @@
 	<div class="tree radar-container-item">
 		<legend> DataSource </legend>
 		<div ng-repeat="category in dataSource">
-			<div ng-repeat="item in category.items">
-				{{item.name}}
+			<div>
+				<h3> {{category.quadrant}} </h3>
+				<div>
+					<div ng-repeat="item in category.items"
+						ng-class="item.name == selectedItem ? 'selected-list-item ' : ''"
+						ng-mouseenter="select(item.name)"
+						ng-mouseleave="select(null)">
+						{{item.name}}
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -17,8 +25,8 @@
 				<circle r="7" id="stable"/>
 			</defs>
 			<circle cx="0" cy="100%" r="99%" fill="#FFE6ED" />
-			<circle cx="0" cy="100%" r="87%" fill="#FDEEEC" class="circle-2" />
-			<circle cx="0" cy="100%" r="75%" fill="#FDF7ED" class="circle-1" />
+			<circle cx="0" cy="100%" r="87%" fill="#FDEEEC" class="circle-2"/>
+			<circle cx="0" cy="100%" r="75%" fill="#FDF7ED" class="circle-1"/>
 			<circle cx="0" cy="100%" r="50%" fill="#EEF5DD" class="circle-0"/>
 			<g class="item-host">
 			</g>
@@ -34,6 +42,8 @@
 	.item-host
 
 	.circle-view-svg
+
+	.selected-radar-item
 
 	#up
 	#stable
