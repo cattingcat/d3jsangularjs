@@ -203,23 +203,15 @@ var circleView = (function() {
 								.attr('y', function(d) {
 									return  (R - d.y);
 								})
-								.on('mouseenter', function(d){
-									var elem = d3.select(this);
-									elem.classed('selected-radar-item', true);
-
-									scope.selectedItem = d.name;
-									scope.$apply();
+								.attr('ng-mouseenter', function(d){
+									return ('selectedItem = "' + d.name + '"');
 								})
-								.on('mouseleave', function(d){
-									var elem = d3.select(this);
-									elem.classed('selected-radar-item', false);
-
-									scope.selectedItem = null;
-									scope.$apply();
-								})
-								.attr('data-itemname', function(d){
-									return d.name;
+								.attr('ng-mouseleave', 'selectedItem = null')
+								.attr('ng-class', function(d){
+									return 'selectedItem == "' + d.name + '" ? "selected-radar-item" : ""';
 								});
+
+						$compile(d3.select('div.radar-svg')[0][0])(scope);
 
 						scope.$watch('dataSource', function() {
 							$log.debug('$watch');
