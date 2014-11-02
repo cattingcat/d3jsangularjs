@@ -66,6 +66,7 @@ var circleView = (function() {
 							if(tmp > minSegmentWidth) {
 								widthCollection[i] = tmp;
 								maxWidth -= tmp;
+								--countAll;
 							}
 						}
 					});
