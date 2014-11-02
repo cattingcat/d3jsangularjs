@@ -192,8 +192,7 @@ var circleView = (function() {
 							return vm;
 						};
 
-						var render = function(dataSource) {
-							var viewModel = makeViewModel(dataSource);
+						var render = function(viewModel) {
 							itemHost.selectAll('use')
 								.remove();
 							itemHost.selectAll('use')
@@ -220,10 +219,18 @@ var circleView = (function() {
 							$compile(d3.select('div.radar-svg')[0][0])(scope);
 						}
 
-						render(scope.dataSource);
+						render(makeViewModel(scope.dataSource));
 
 						scope.$on('dataSourceFilter', function(e, template) {
-							render(scope.filter(scope.dataSource, template));
+							var ds = scope.filter(scope.dataSource, template);
+							var items = [];
+							ds.forEach(function(o) {
+								items = items.concat(o.items);
+							});
+							segmentsWidth = configureSectors(svg, items);
+
+							var vm = makeViewModel(ds);
+							render(vm);
 						});
 					}
 				}
