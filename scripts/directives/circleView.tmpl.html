@@ -7,7 +7,7 @@
 				<h3> {{category.quadrant}} </h3>
 				<div>
 					<div ng-repeat="item in category.items"
-						ng-class="item.name == selectedItem ? 'selected-list-item ' : ''"
+						ng-class="item.name == selectedItem ? 'radar-selected-list-item ' : 'radar-list-item'"
 						ng-mouseenter="select(item.name)"
 						ng-mouseleave="select(null)">
 						{{item.name}}

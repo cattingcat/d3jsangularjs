@@ -55,15 +55,22 @@ div.radar-svg {
 	width: 50%;
 }
 
-.selected-list-item {
+
+.radar-list-item {
+	transition: background 0.5s ease;
+}
+
+.radar-selected-list-item {
 	background-color: #b0c4de;
 }
+
 
 g.item-host > use {
 	cursor: pointer;
 	fill: #555555;
+	transition: fill 0.5s ease;
 }
 
 g.item-host > use.selected-radar-item {
-	fill: #FF0000;
+	fill: #FF3C73;
 }

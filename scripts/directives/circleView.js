@@ -80,35 +80,30 @@ var circleView = (function() {
 				};
 
 				function layoutItems(collection, ri, rs, re, as, ae) {
-					if(collection.length != 0) {
-						$log.debug(collection[0].maturity + ' ' + rs + ' ' + re + ' ' + as + ' ' + ae);
-					} else {
+					if(!collection || collection.length == 0) {
 						$log.info('empty collection');
 						return [];
 					}
 					var vm = [];
-
-					var Di = ri * 2;  // item diameter
-					var DiWithMargin = Di + 12;
-
+					var Di = ri * 2;	// item diameter
 					var itemIndex = 0;
 
-					for(var ir = rs + ri; ir < re - ri && itemIndex < collection.length; ir += DiWithMargin) {
-						//var currentC = (2 * Math.PI * ir) * (ae - as) / Math.PI;
-						var currentC = 2 * ir * (ae - as);
+					for(var ir = rs + ri; ir < re - ri && itemIndex < collection.length; ir += Di) {
+						//var currentC = (2 * Math.PI * ir) * (ae - as) / (2 * Math.PI);
+						var currentC = ir * (ae - as);
 
-						var itemOnRadius = Math.floor(currentC / DiWithMargin);
+						var itemOnArc = Math.floor(currentC / Di);
 
-						if(itemOnRadius > 0) {
-							var angleForItem = (ae - as) / itemOnRadius;
+						if(itemOnArc > 0) {
+							var angleForItem = (ae - as) / itemOnArc;
 							for(var ia = as + angleForItem; ia < ae; ia += angleForItem) {
-								var blItem = collection[itemIndex];
+								var item = collection[itemIndex];
 								// fields
 								var vmItem = {
-									trend: blItem.movement,
+									trend: item.movement,
 									x: ir * Math.cos(ia),
 									y: ir * Math.sin(ia),
-									name: blItem.name
+									name: item.name
 								};
 								vm.push(vmItem);
 
@@ -117,7 +112,6 @@ var circleView = (function() {
 									break;
 								}
 							}
-
 						}
 					}
 					return vm;
@@ -137,13 +131,6 @@ var circleView = (function() {
 
 						scope.selectedItem = null;
 						scope.select = function(itemName){
-							var allUseItems = svg.selectAll('g.item-host > use');
-							allUseItems.classed('selected-radar-item', false);
-
-							var viewItems = svg.selectAll('g.item-host > use[data-itemname="' +
-							 itemName + '"]');
-							viewItems.classed('selected-radar-item', true);
-
 							scope.selectedItem = itemName;
 						};
 					},
@@ -152,7 +139,7 @@ var circleView = (function() {
 						var itemHost = svg.select('g.item-host');
 						// SVG Radius (from tmpl.html)
 						var R = svg.attr('width');
-						var itemRadius = 7;
+						var itemRadius = 9;	// with margin
 
 						var viewModel = (function() {
 							var baseAngle = Math.PI / 2;
@@ -215,6 +202,10 @@ var circleView = (function() {
 
 						scope.$watch('dataSource', function() {
 							$log.debug('$watch');
+						});
+
+						scope.$on('dataSourceFilter', function(e, template) {
+							$window.alert('filter change');
 						});
 					}
 				}
