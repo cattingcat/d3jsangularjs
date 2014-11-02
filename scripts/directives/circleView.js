@@ -133,6 +133,21 @@ var circleView = (function() {
 						scope.select = function(itemName){
 							scope.selectedItem = itemName;
 						};
+						scope.filter = function(dataSource, template) {
+							if(!template)
+								return dataSource;
+							var ds = [];
+							dataSource.forEach(function(o) {
+								var tmp = {};
+								tmp.quadrant = o.quadrant;
+								tmp.items = o.items.filter(function(fo) {
+									return (fo.maturity == template.recommendation || template.recommendation == 'All') && 
+										(fo.movement == template.trend || template.trend == 'All');
+								});
+								ds.push(tmp);
+							});
+							return ds;
+						}
 					},
 					post: function(scope, element, attrs) { 
 						var svg = d3.select(element[0]).select('svg.circle-view-svg');
@@ -141,13 +156,13 @@ var circleView = (function() {
 						var R = svg.attr('width');
 						var itemRadius = 9;	// with margin
 
-						var viewModel = (function() {
+						var makeViewModel = function(dataSource) {
 							var baseAngle = Math.PI / 2;
-							var categoryCount = scope.dataSource.length;
+							var categoryCount = dataSource.length;
 							var anglePerCategory = baseAngle / categoryCount;
 
 							var vm = [];
-							scope.dataSource.forEach(function(o, i) {
+							dataSource.forEach(function(o, i) {
 								var startCategoryAngle = anglePerCategory * i;
 								var endCategoryAngle = anglePerCategory * (i + 1);
 
@@ -175,37 +190,40 @@ var circleView = (function() {
 								}
 							});
 							return vm;
-						})();
+						};
 
-						itemHost.selectAll('g.item')
-							.data(viewModel)
-							.enter()
-							.append('use')
-								.attr('xlink:href', function(d) {
-									return '#' + d.trend.toLowerCase();
-								})
-								.attr('x', function(d) {
-									return d.x;
-								})
-								.attr('y', function(d) {
-									return  (R - d.y);
-								})
-								.attr('ng-mouseenter', function(d){
-									return ('selectedItem = "' + d.name + '"');
-								})
-								.attr('ng-mouseleave', 'selectedItem = null')
-								.attr('ng-class', function(d){
-									return 'selectedItem == "' + d.name + '" ? "selected-radar-item" : ""';
-								});
+						var render = function(dataSource) {
+							var viewModel = makeViewModel(dataSource);
+							itemHost.selectAll('use')
+								.remove();
+							itemHost.selectAll('use')
+								.data(viewModel)
+								.enter()
+								.append('use')
+									.attr('xlink:href', function(d) {
+										return '#' + d.trend.toLowerCase();
+									})
+									.attr('x', function(d) {
+										return d.x;
+									})
+									.attr('y', function(d) {
+										return  (R - d.y);
+									})
+									.attr('ng-mouseenter', function(d){
+										return ('selectedItem = "' + d.name + '"');
+									})
+									.attr('ng-mouseleave', 'selectedItem = null')
+									.attr('ng-class', function(d){
+										return 'selectedItem == "' + d.name + '" ? "selected-radar-item" : ""';
+									});
 
-						$compile(d3.select('div.radar-svg')[0][0])(scope);
+							$compile(d3.select('div.radar-svg')[0][0])(scope);
+						}
 
-						scope.$watch('dataSource', function() {
-							$log.debug('$watch');
-						});
+						render(scope.dataSource);
 
 						scope.$on('dataSourceFilter', function(e, template) {
-							$window.alert('filter change');
+							render(scope.filter(scope.dataSource, template));
 						});
 					}
 				}
