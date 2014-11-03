@@ -130,6 +130,7 @@ var circleView = (function() {
 						});
 						segmentsWidth = configureSectors(svg, items);
 
+						scope.filteredDS = scope.dataSource;
 						scope.selectedItem = null;
 						scope.select = function(itemName){
 							scope.selectedItem = itemName;
@@ -224,6 +225,7 @@ var circleView = (function() {
 
 						scope.$on('dataSourceFilter', function(e, template) {
 							var ds = scope.filter(scope.dataSource, template);
+							scope.filteredDS = ds;
 							var items = [];
 							ds.forEach(function(o) {
 								items = items.concat(o.items);
