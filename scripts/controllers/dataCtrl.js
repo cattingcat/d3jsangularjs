@@ -160,7 +160,7 @@ var dataCtrl = (function(){
 				"quadrant" : "Cache",
 				"items" : [
 					{
-						"name" : "Cache- Velocity",
+						"name" : "Cache- Velocity1",
 						"movement" : "Stable",
 						"maturity" : "Use",
 						"source" : {
@@ -169,7 +169,7 @@ var dataCtrl = (function(){
 						},
 					},
 					{
-						"name" : "Cache- Velocity",
+						"name" : "Cache- Velocity2",
 						"movement" : "Stable",
 						"maturity" : "Use",
 						"source" : {
@@ -178,7 +178,7 @@ var dataCtrl = (function(){
 						},
 					},
 					{
-						"name" : "Cache- Velocity",
+						"name" : "Cache- Velocity3",
 						"movement" : "Stable",
 						"maturity" : "Use",
 						"source" : {
@@ -187,7 +187,7 @@ var dataCtrl = (function(){
 						},
 					},
 					{
-						"name" : "Cache- Velocity",
+						"name" : "Cache- Velocity4",
 						"movement" : "Stable",
 						"maturity" : "Use",
 						"source" : {
@@ -196,7 +196,7 @@ var dataCtrl = (function(){
 						},
 					},
 					{
-						"name" : "Cache- Velocity",
+						"name" : "Cache- Velocity5",
 						"movement" : "Stable",
 						"maturity" : "Use",
 						"source" : {
@@ -205,7 +205,7 @@ var dataCtrl = (function(){
 						},
 					},
 					{
-						"name" : "Cache- Velocity",
+						"name" : "Cache- Velocity6",
 						"movement" : "Stable",
 						"maturity" : "Use",
 						"source" : {
@@ -214,7 +214,7 @@ var dataCtrl = (function(){
 						},
 					},
 					{
-						"name" : "Cache- Velocity",
+						"name" : "Cache- Velocity7",
 						"movement" : "Stable",
 						"maturity" : "Use",
 						"source" : {
@@ -223,7 +223,7 @@ var dataCtrl = (function(){
 						},
 					},
 					{
-						"name" : "Cache- Velocity",
+						"name" : "Cache- Velocity8",
 						"movement" : "Stable",
 						"maturity" : "Use",
 						"source" : {
@@ -232,7 +232,7 @@ var dataCtrl = (function(){
 						},
 					},
 					{
-						"name" : "Cache- Velocity",
+						"name" : "Cache- Velocity9",
 						"movement" : "Stable",
 						"maturity" : "Use",
 						"source" : {
@@ -241,7 +241,7 @@ var dataCtrl = (function(){
 						},
 					},
 					{
-						"name" : "Cache- Velocity",
+						"name" : "Cache- Velocity10",
 						"movement" : "Stable",
 						"maturity" : "Use",
 						"source" : {
@@ -250,7 +250,7 @@ var dataCtrl = (function(){
 						},
 					},
 					{
-						"name" : "Cache- Velocity",
+						"name" : "Cache- Velocity11",
 						"movement" : "Stable",
 						"maturity" : "Use",
 						"source" : {
@@ -259,7 +259,7 @@ var dataCtrl = (function(){
 						},
 					},
 					{
-						"name" : "Cache- Velocity",
+						"name" : "Cache- Velocity12",
 						"movement" : "Stable",
 						"maturity" : "Use",
 						"source" : {
