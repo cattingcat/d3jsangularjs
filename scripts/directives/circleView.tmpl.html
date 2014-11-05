@@ -3,15 +3,19 @@
 	<div class="tree radar-container-item">
 		<legend> DataSource </legend>
 		<div ng-repeat="category in filteredDS">
-			<div>
-				<h3> {{category.quadrant}} </h3>
-				<div>
-					<div ng-repeat="item in category.items"
-						ng-class="item.name == selectedItem ? 'radar-selected-list-item ' : 'radar-list-item'"
-						ng-mouseenter="select(item.name)"
-						ng-mouseleave="select(null)">
-						{{item.name}}
-					</div>
+			<div ng-click="category.expand = !category.expand" class="tree-category">
+				<span ng-if="!category.expand">-</span>
+				<span ng-if=" category.expand">+</span>
+
+				<strong>{{category.quadrant}} </strong>
+			</div>
+			<div ng-class="category.expand ? 'expand-closed' : 'expand-open'">
+
+				<div ng-repeat="item in category.items"
+					ng-class="item.name == selectedItem ? 'radar-selected-list-item ' : 'radar-list-item'"
+					ng-mouseenter="select(item.name)"
+					ng-mouseleave="select(null)">
+					{{item.name}}
 				</div>
 			</div>
 		</div>
@@ -20,9 +24,9 @@
 	<div class="radar-svg radar-container-item">
 		<svg width="500" height="500" class="circle-view-svg">
 			<defs>
-				<polygon points="-8,-8 8,-8 0,8" id="down"/>
-				<polygon points="-8,8 8,8 0,-8" id="up"/>
-				<circle r="8" id="stable"/>
+				<polygon points="-9,-9 9,-9 0,9" id="down"/>
+				<polygon points="-9,9 9,9 0,-9" id="up"/>
+				<circle r="9" id="stable"/>
 			</defs>
 			<circle cx="0" cy="100%" r="99%" fill="#FFE6ED" />
 			<circle cx="0" cy="100%" r="87%" fill="#FDEEEC" class="circle-2"/>

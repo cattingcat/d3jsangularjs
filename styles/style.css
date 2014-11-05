@@ -40,6 +40,17 @@ div.radar-container-item {
 }
 
 /* circle view classes */
+.expand-open {
+	padding-left: 10px;
+	display: block; 
+}
+.expand-closed {
+	display: none; 
+}
+.tree-category {
+	cursor: pointer;
+}
+
 div.tree {
 	width: 20%;
 	height: 100%;
