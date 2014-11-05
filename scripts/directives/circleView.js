@@ -7,7 +7,7 @@ var circleView = (function() {
 			scope:{
 				dataSource: '=circleView'
 			},
-			compile: function (temaplateElement, templateAttrs) {
+			compile: function (templateElement, templateAttrs) {
 				var maturities = {
 					use: 'Use', 
 					useCare: 'Use with care',
