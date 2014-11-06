@@ -49,6 +49,13 @@ div.radar-container-item {
 }
 .tree-category {
 	cursor: pointer;
+
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 div.tree {
