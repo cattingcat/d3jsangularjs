@@ -66,7 +66,8 @@ var circleView = (function() {
 							if(tmp > minSegmentWidth) {
 								widthCollection[i] = tmp;
 								maxWidth -= tmp;
-								--countAll;
+								countAll -= o;
+								--segments;
 							}
 						}
 					});
@@ -156,7 +157,7 @@ var circleView = (function() {
 						var itemHost = svg.select('g.item-host');
 						// SVG Radius (from tmpl.html)
 						var R = svg.attr('width');
-						var itemRadius = 13;	// with margin
+						var itemRadius = 6;	// with margin
 
 						var makeViewModel = function(dataSource) {
 							var baseAngle = Math.PI / 2;
