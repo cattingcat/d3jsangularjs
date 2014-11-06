@@ -1,5 +1,5 @@
-'use strict';
-var circleView = (function() {
+define([], function() {
+	'use strict';
 	var factory = function($compile, $document, $window, $log) {
 
 		var o = {
@@ -251,4 +251,5 @@ var circleView = (function() {
 		return o;
 	}
 	return ['$compile', '$document', '$window', '$log', factory];
-})();
+});
+

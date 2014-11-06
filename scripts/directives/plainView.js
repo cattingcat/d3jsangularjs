@@ -1,5 +1,5 @@
-'use strict';
-var plainView = (function() {
+define([]funcrion() {
+	'use strict';
 	var factory = function($log) {
 
 		var directiveObj = {	
@@ -327,5 +327,5 @@ var plainView = (function() {
 		};
 		return directiveObj;
 	}
-	return ['$log', factory];
-})();
+	return ['$log', factory];})();
+});

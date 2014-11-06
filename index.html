@@ -3,10 +3,8 @@
 <head>
 <link rel="stylesheet" type="text/css" href="/styles/style.css">
 </head>
-<body ng-app="app">
-	
+<body>
 	<div ng-controller="dataController">
-	
 		<div>
 			<select ng-Model="filter.trend" ng-change="filterChange()">
 				<option>All</option>
@@ -53,11 +51,8 @@
 	</div>
 
 	<script src="http://d3js.org/d3.v3.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.js"></script>	
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.js"></script>
+	<script data-main="scripts/main" src="http://requirejs.org/docs/release/2.1.15/comments/require.js"></script>
 
-	<script src="/scripts/directives/circleView.js"></script>
-	<script src="/scripts/directives/plainView.js"></script>
-	<script src="/scripts/controllers/dataCtrl.js"></script>
-	<script src="/scripts/app.js"></script>
 </body>
 </html>

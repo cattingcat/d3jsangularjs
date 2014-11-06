@@ -1,5 +1,5 @@
-'use strict';
-var dataCtrl = (function(){
+define([], function() {
+	'use strict';
 	var factory = function($scope, $log){
 		$scope.data = {
 			"quadrant" : "Cache",
@@ -400,5 +400,5 @@ var dataCtrl = (function(){
 		};
 	}
 	return ['$scope', '$log', factory];
-})();
+});
 
