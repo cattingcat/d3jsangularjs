@@ -37,7 +37,7 @@ var circleView = (function() {
 						++countAll;
 					});
 
-					var minSegmentWidth = 15;  //%
+					var minSegmentWidth = 5;  //%
 					var maxWidth = 100;  //%
 					var widthCollection = [0, 0, 0, 0];
 					var segments = 4;
@@ -98,7 +98,7 @@ var circleView = (function() {
 
 						if(itemOnArc > 0) {
 							var angleForItem = (ae - as) / itemOnArc;
-							for(var ia = as + angleForItem; ia < ae; ia += angleForItem) {
+							for(var ia = as + angleForItem; ia < ae && ia < Math.PI / 2 - 0.05; ia += angleForItem) {
 								var item = collection[itemIndex];
 								// fields
 								var vmItem = {
@@ -160,7 +160,7 @@ var circleView = (function() {
 						var itemHost = svg.select('g.item-host');
 						// SVG Radius (from tmpl.html)
 						var R = svg.attr('width');
-						var itemRadius = 7;	// with margin
+						var itemRadius = 9;	// with margin
 
 						var makeViewModel = function(dataSource) {
 							var baseAngle = Math.PI / 2;
