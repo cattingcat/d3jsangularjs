@@ -116,6 +116,9 @@ var circleView = (function() {
 							}
 						}
 					}
+					if(itemIndex < collection.length - 1) {
+						$log.error('items overfow');
+					}
 					return vm;
 				}
 
@@ -157,7 +160,7 @@ var circleView = (function() {
 						var itemHost = svg.select('g.item-host');
 						// SVG Radius (from tmpl.html)
 						var R = svg.attr('width');
-						var itemRadius = 6;	// with margin
+						var itemRadius = 7;	// with margin
 
 						var makeViewModel = function(dataSource) {
 							var baseAngle = Math.PI / 2;
