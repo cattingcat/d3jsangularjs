@@ -94,11 +94,11 @@ var circleView = (function() {
 						//var currentC = (2 * Math.PI * ir) * (ae - as) / (2 * Math.PI);
 						var currentC = ir * (ae - as);
 
-						var itemOnArc = Math.floor(currentC / Di);
+						var itemOnArc = currentC / Di;
 
-						if(itemOnArc > 0) {
+						if(itemOnArc >= 1) {
 							var angleForItem = (ae - as) / itemOnArc;
-							for(var ia = as + angleForItem; ia < ae && ia < Math.PI / 2 - 0.05; ia += angleForItem) {
+							for(var ia = as + angleForItem / 2; ia < ae - angleForItem / 2; ia += angleForItem) {
 								var item = collection[itemIndex];
 								// fields
 								var vmItem = {
