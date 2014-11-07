@@ -1,0 +1,45 @@
+<div ng-controller="dataController">
+		<div>
+			<select ng-Model="filter.trend" ng-change="filterChange()">
+				<option>All</option>
+				<option>Stable</option>
+				<option>Up</option>
+				<option>Down</option>
+            </select>
+            <select ng-Model="filter.recommendation" ng-change="filterChange()">
+            	<option>All</option>
+				<option>Use</option>
+				<option>Use with care</option>
+				<option>Be informed</option>
+				<option>Avoid</option>
+            </select>
+			<!--<input type="text" placeholder="filter" />
+			<div ng-repeat="item in data.items">
+				{{item}}
+			</div>-->
+			<button ng-click="click()"> Test </button>
+		</div>
+	
+
+		<div ng-init="view='circle'">
+			<input type="radio" ng-model="view" value="circle" checked> Circle </input>
+			<input type="radio" ng-model="view" value="table"> Table </input>
+			<input type="radio" ng-model="view" value="plain"> Plain </input>
+		</div>
+
+		<div ng-switch="view">
+
+			<div ng-switch-when="table">
+				TODO: table
+			</div>
+
+			<div ng-switch-when="plain">
+				<div plain-view="data"></div>
+			</div>
+
+			<div ng-switch-when="circle" class="radar-container">	
+				<div circle-view="circleData"></div>
+			</div>
+
+		</div>
+	</div>
